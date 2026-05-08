@@ -147,6 +147,8 @@ export default function Home() {
     return <AuthScreen onEnter={() => setIsAuthenticated(true)} />;
   }
 
+  return <DashboardScreen />;
+
   return (
     <main className="app-shell">
       <aside className="sidebar">
@@ -457,6 +459,201 @@ export default function Home() {
             ))}
           </div>
         </section>
+      </section>
+    </main>
+  );
+}
+
+function DashboardScreen() {
+  const sidebarItems = [
+    { icon: "⌘", label: "Tổng quan", active: true },
+    { icon: "👥", label: "Hồ sơ nhân viên", active: false },
+    { icon: "✈", label: "Nghỉ phép", active: false },
+    { icon: "▣", label: "Chấm công", active: false },
+    { icon: "$", label: "Tiền lương", active: false },
+    { icon: "◇", label: "Đào tạo", active: false },
+    { icon: "♡", label: "Phúc lợi", active: false },
+    { icon: "▥", label: "Báo cáo", active: false },
+    { icon: "⚙", label: "Cài đặt", active: false },
+  ];
+
+  const kpis = [
+    ["👥", "300", "Tổng Nhân Viên", "5 phòng ban", "+12 tháng này", "green"],
+    ["▣", "292", "Đang Làm Việc", "97% tổng nhân sự", "97.3%", "blue"],
+    ["▤", "5", "Phòng Ban", "4 chi nhánh", "", "cyan"],
+    ["◷", "92.5%", "Tỷ Lệ Chấm Công", "8.3% đi muộn", "+2.1%", "violet"],
+    ["$", "28 triệu", "Lương TB / Người", "VNĐ / tháng", "", "amber"],
+    ["☹", "1.3%", "Tỷ Lệ Nghỉ Việc", "4 người đã nghỉ", "1.3%", "red"],
+  ];
+
+  const bars = [
+    ["IT", 66, "#15803d", "Công Nghệ Thông Tin"],
+    ["HR", 55, "#5146e5", "Nhân Sự"],
+    ["FIN", 48, "#1396ad", "Tài Chính"],
+    ["MKT", 73, "#c2185b", "Marketing"],
+    ["SALES", 58, "#7c3aed", "Kinh Doanh"],
+  ];
+
+  return (
+    <main className="home-shell">
+      <aside className="home-sidebar">
+        <div className="home-logo">nextX</div>
+
+        <nav className="home-nav" aria-label="Dashboard navigation">
+          {sidebarItems.slice(0, 1).map(({ icon, label, active }) => (
+            <a className={active ? "active" : ""} href="#dashboard" key={label}>
+              <span>{icon}</span>
+              <strong>{label}</strong>
+              <em>›</em>
+            </a>
+          ))}
+          <div className="home-subnav">
+            <span />
+            <strong>Dashboard</strong>
+          </div>
+          <div className="home-subnav muted">
+            <span />
+            <strong>Lịch sự kiện</strong>
+          </div>
+          {sidebarItems.slice(1).map(({ icon, label, active }) => (
+            <a className={active ? "active" : ""} href="#dashboard" key={label}>
+              <span>{icon}</span>
+              <strong>{label}</strong>
+              <em>›</em>
+            </a>
+          ))}
+        </nav>
+
+        <div className="home-user-card">
+          <span>NV</span>
+          <div>
+            <strong>Nguyễn Văn A</strong>
+            <small>HR Admin</small>
+          </div>
+          <em>↗</em>
+        </div>
+
+        <div className="home-version">
+          <span>NX</span>
+          nextX · v2.2.0
+        </div>
+      </aside>
+
+      <section className="home-main">
+        <header className="home-topbar">
+          <label className="home-search">
+            <span>⌕</span>
+            <input placeholder="Tìm kiếm nhân viên, ca làm việc..." />
+          </label>
+
+          <div className="home-actions">
+            <button type="button" className="company-pill">
+              <span>TGV</span>
+              Thế Giới Việt
+            </button>
+            <button type="button">☾</button>
+            <button type="button">☷</button>
+            <button type="button">?</button>
+            <button type="button" className="bell">♧</button>
+            <div className="top-profile">
+              <span>NV</span>
+              <div>
+                <strong>Nguyễn Văn A</strong>
+                <small>HR Admin</small>
+              </div>
+              <em>⌄</em>
+            </div>
+          </div>
+        </header>
+
+        <div className="home-content" id="dashboard">
+          <section className="home-hero-row">
+            <div>
+              <h1>Chào buổi sáng, HR Admin 👋</h1>
+              <p>Thứ Sáu, 8 Tháng 5, 2026</p>
+            </div>
+            <div className="home-alerts">
+              <span className="warning">♧ 12 đơn nghỉ chờ duyệt</span>
+              <span className="info">▤ 120 bảng lương chờ xử lý</span>
+            </div>
+          </section>
+
+          <section className="kpi-row">
+            {kpis.map(([icon, value, label, note, badge, tone]) => (
+              <article className={`kpi-card ${tone}`} key={label}>
+                <div className="kpi-top">
+                  <span className="kpi-icon">{icon}</span>
+                  {badge ? <em>{badge}</em> : null}
+                </div>
+                <strong>{value}</strong>
+                <p>{label}</p>
+                <small>{note}</small>
+              </article>
+            ))}
+          </section>
+
+          <section className="dashboard-grid">
+            <article className="dashboard-panel chart-panel">
+              <div className="panel-heading">
+                <h2>Phân Bổ Nhân Sự Theo Phòng Ban</h2>
+                <p>Số lượng nhân viên tại từng phòng ban</p>
+              </div>
+              <div className="bar-chart" aria-label="Biểu đồ phân bổ nhân sự">
+                <div className="chart-scale">
+                  <span>80</span>
+                  <span>60</span>
+                  <span>40</span>
+                  <span>20</span>
+                  <span>0</span>
+                </div>
+                <div className="chart-bars">
+                  {bars.map(([label, value, color]) => (
+                    <div className="chart-bar-item" key={label}>
+                      <span style={{ height: `${Number(value) * 2.8}px`, background: String(color) }} />
+                      <small>{label}</small>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="chart-legend">
+                {bars.map(([label, value, color, name]) => (
+                  <span key={label}>
+                    <i style={{ background: String(color) }} />
+                    {name} <strong>({value})</strong>
+                  </span>
+                ))}
+              </div>
+            </article>
+
+            <aside className="side-panels">
+              <article className="dashboard-panel employee-status">
+                <h2>Trạng Thái Nhân Viên</h2>
+                <div className="status-body">
+                  <div className="donut-chart" />
+                  <div className="status-list">
+                    <span><i className="green-dot" />Đang làm <strong>292</strong></span>
+                    <span><i className="orange-dot" />Đang nghỉ phép <strong>4</strong></span>
+                    <span><i className="red-dot" />Đã nghỉ việc <strong>4</strong></span>
+                  </div>
+                </div>
+              </article>
+
+              <article className="dashboard-panel contract-panel">
+                <h2>Loại Hợp Đồng</h2>
+                <div className="contract-row">
+                  <span>Toàn thời gian</span>
+                  <strong>271 (90%)</strong>
+                </div>
+                <div className="progress"><span style={{ width: "90%" }} /></div>
+                <div className="contract-row">
+                  <span>Hợp đồng</span>
+                  <strong>13 (4%)</strong>
+                </div>
+                <div className="progress purple"><span style={{ width: "4%" }} /></div>
+              </article>
+            </aside>
+          </section>
+        </div>
       </section>
     </main>
   );
