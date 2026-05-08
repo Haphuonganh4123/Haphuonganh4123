@@ -63,6 +63,31 @@ a {
   color: inherit;
 }
 
+.route-fallback {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 14px;
+  background: #f8fafc;
+  color: var(--muted);
+}
+
+.route-fallback span {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--green);
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.route-fallback p {
+  margin: 0;
+}
+
 .auth-shell {
   height: 100vh;
   display: grid;
