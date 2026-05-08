@@ -1,0 +1,640 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+
+const navItems = [
+  ["overview", "Tổng quan", "Vận hành HRM"],
+  ["catalog", "Danh mục", "Cấu hình nền"],
+  ["employees", "Hồ sơ NV", "Vòng đời nhân sự"],
+  ["contracts", "Hợp đồng", "TV, HV, HĐLĐ"],
+  ["attendance", "Chấm công", "Ca, nghỉ, OT"],
+  ["payroll", "Tiền lương", "BH, PIT, bank list"],
+  ["security", "Phân quyền", "SSO, RBAC, audit"],
+  ["feedback", "Ý kiến NLĐ", "Tiếp nhận, phản hồi"],
+  ["quality", "NFR", "Hiệu năng, bảo mật"],
+];
+
+const metrics = [
+  ["Nhân sự", "1.000", "Mục tiêu tải hệ thống"],
+  ["Module", "07", "Theo phạm vi SRS v2.1"],
+  ["Ca LSEV", "07", "Có ca vắt qua đêm +1"],
+  ["Ký hiệu công", "30+", "Song ngữ VI-EN"],
+  ["Tính lương", "< 5 phút", "Cho toàn công ty"],
+  ["Xuất Excel", "< 15 giây", "Cho 1.000 dòng"],
+];
+
+const modules = [
+  {
+    code: "M01",
+    title: "Danh mục & Cấu hình",
+    owner: "HR Admin",
+    scope: "Cây tổ chức, ca làm việc, ký hiệu nghỉ, chức danh, bậc lương, phụ cấp, định mức pháp luật, RBAC.",
+  },
+  {
+    code: "M02",
+    title: "Hồ sơ nhân viên",
+    owner: "HR Admin, TBP",
+    scope: "Thông tin cá nhân, 5 loại quá trình, người liên hệ, NPT, ngân hàng, đào tạo, thôi việc.",
+  },
+  {
+    code: "M03",
+    title: "Hợp đồng lao động",
+    owner: "HR Admin",
+    scope: "4 loại hợp đồng, quy trình tự động, 7 template VI-EN, đánh giá, cảnh báo hết hạn, in PDF/Word.",
+  },
+  {
+    code: "M04",
+    title: "Chấm công",
+    owner: "HR Admin, Tổ trưởng, NLĐ",
+    scope: "Máy Ronald Jack, xếp ca, đăng ký nghỉ 3 cấp, OT tự động, tổng hợp công, báo cáo.",
+  },
+  {
+    code: "M05",
+    title: "Tiền lương",
+    owner: "HR Admin, Kế toán",
+    scope: "Engine lương, 8 loại OT, bảo hiểm, PIT 2 phương thức, phiếu lương, bank list Vietinbank.",
+  },
+  {
+    code: "M06",
+    title: "Phân quyền & Đăng nhập",
+    owner: "HR Admin, System Admin",
+    scope: "Username/password, SSO AD/LDAP, RBAC linh hoạt, quản lý tài khoản, audit log.",
+  },
+  {
+    code: "M07",
+    title: "Ý kiến nhân viên",
+    owner: "NLĐ, HR Admin",
+    scope: "NLĐ gửi thắc mắc, HR tiếp nhận và phản hồi, lịch sử theo nhân viên, thông báo.",
+  },
+];
+
+const setupSteps = [
+  "Thiết lập cây tổ chức 6 cấp",
+  "Tạo chức danh và phân loại NV/CN",
+  "Cấu hình bậc lương theo năm",
+  "Tạo phụ cấp Housing, Productivity, Position",
+  "Cài đặt 7 ca làm việc LSEV",
+  "Cài đặt 30+ ký hiệu công song ngữ",
+  "Cấu hình định mức LTT, BH, PIT, OT",
+  "Tạo role, gán quyền, gán user",
+];
+
+const shifts = [
+  ["CA1", "Ca sáng", "06:00", "14:00", "8h", "Ca sản xuất"],
+  ["CA2", "Ca chiều", "14:00", "22:00", "8h", "Ca sản xuất"],
+  ["CA3", "Ca đêm", "22:00", "06:00+1", "8h", "Ca vắt qua ngày sau"],
+  ["HC", "Hành chính", "08:00", "17:00", "8h", "Nghỉ giữa ca 60 phút"],
+];
+
+const employees = [
+  ["00003", "Nguyễn Văn An", "Production 3", "Assy 1", "Công nhân", "Đang làm việc"],
+  ["00791", "Trần Thị Bình", "HR", "HR", "Nhân viên", "Thử việc"],
+  ["01742", "Lê Minh Châu", "Accounting", "Accounting", "Nhân viên", "Đang làm việc"],
+  ["02118", "Phạm Quốc Dũng", "Molding", "Molding Engineer", "Công nhân", "Học việc"],
+];
+
+const contractFlow = [
+  "NV mới: tự sinh thỏa thuận thử việc hoặc học việc theo phân loại",
+  "Cảnh báo trước hết hạn 30, 15, 7 ngày",
+  "Đánh giá thử việc/học việc với 7 tiêu chí",
+  "Ký HĐLĐ xác định thời hạn, mã dạng MãNV/HĐLĐ/Năm",
+  "Gia hạn lần 2 hoặc chuyển HĐLĐ không xác định thời hạn",
+];
+
+const attendancePhases = [
+  ["01", "Cài đặt tháng", "Lịch nghỉ tuần, nghỉ lễ, kiểu công tiêu chuẩn, giờ công tiêu chuẩn."],
+  ["02", "Xếp ca", "Import Excel D1-D31 hoặc xếp ca tay; tổ trưởng đăng ký ca công nhân."],
+  ["03", "Dữ liệu chấm công", "Máy Ronald Jack gửi real-time hoặc import text/Excel; tự nhận dạng +, In, Out, CS, KP."],
+  ["04", "Đăng ký nghỉ", "Luồng phê duyệt theo nhóm: CN, NV, TBP; HR là bước cuối."],
+  ["05", "Tổng hợp công", "Tính 30+ chỉ số, xuất Attendance, OT Summary, OT Record, Night Shift và phiếu đối chiếu."],
+];
+
+const payrollRows = [
+  ["Lương OT", "LCB + PC Công việc + PC Năng suất + PC Nhà ở + KPI cơ sở"],
+  ["Lương ngày", "Lương OT / Ngày công tiêu chuẩn"],
+  ["Lương giờ", "Lương OT / Giờ công tiêu chuẩn"],
+  ["Lương làm đêm", "Lương giờ x 30% x Giờ làm đêm 22h-5h"],
+  ["Thưởng KPI", "KPI cơ sở x tỷ lệ S/A/B/C/D x ngày hưởng lương / ngày TC"],
+  ["Trừ đi muộn", "(Lương giờ / 4) x ROUND(Tổng phút / 15, 0)"],
+  ["Thực lĩnh", "Gross receiving - BH NLĐ - PIT - khấu trừ khác"],
+];
+
+const roles = [
+  ["HR Admin", "Toàn công ty", "Toàn quyền module, tính lương, xuất báo cáo, quản lý tài khoản"],
+  ["TBP / BOD", "Bộ phận", "Xem bảng công, duyệt nghỉ, xem hồ sơ nhân viên thuộc phạm vi"],
+  ["Tổ trưởng", "Tổ", "Đăng ký ca công nhân, duyệt nghỉ cấp 1, xem công trong tổ"],
+  ["NLĐ", "Bản thân", "Xem hồ sơ, gửi nghỉ, xem công, xem phiếu lương, gửi ý kiến"],
+  ["System Admin", "Kỹ thuật", "SMTP, SSO, backup, monitoring; không xem dữ liệu nhân sự"],
+];
+
+const feedbackItems = [
+  ["Thắc mắc công", "Mở", "Chờ HR kiểm tra bảng công tháng 04/2026"],
+  ["Thay đổi thông tin", "Đang xử lý", "Cập nhật số CCCD và địa chỉ thường trú"],
+  ["Thắc mắc lương", "Đã phản hồi", "Giải thích công thức OT đêm Chủ nhật"],
+];
+
+const nfrs = [
+  ["Hiệu năng", "Response time < 2 giây cho 95% request; tính lương 1.000 NV < 5 phút."],
+  ["Bảo mật", "HTTPS, mã hóa lương/CCCD/tài khoản NH, row-level security, tuân thủ Nghị định 13/2023/NĐ-CP."],
+  ["Độ tin cậy", "Uptime >= 99.5% trong giờ làm việc, backup hằng ngày, RTO < 4 giờ."],
+  ["Dữ liệu", "Lương đã chốt không thể xóa; chỉ mở lại và tính lại kèm audit log."],
+];
+
+export default function Home() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  if (!isAuthenticated) {
+    return <AuthScreen onEnter={() => setIsAuthenticated(true)} />;
+  }
+
+  return (
+    <main className="app-shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <span>NX</span>
+          <div>
+            <strong>NextX HRM</strong>
+            <small>LSEV SRS v2.1</small>
+          </div>
+        </div>
+
+        <nav className="nav-list" aria-label="Điều hướng module">
+          {navItems.map(([href, title, note]) => (
+            <a href={`#${href}`} key={href}>
+              <strong>{title}</strong>
+              <small>{note}</small>
+            </a>
+          ))}
+        </nav>
+
+        <div className="sidebar-footer">
+          <span className="status-dot" />
+          <div>
+            <strong>HR Admin</strong>
+            <small>Toàn quyền vận hành</small>
+          </div>
+        </div>
+      </aside>
+
+      <section className="workspace">
+        <header className="topbar">
+          <div className="search-field">Tìm nhân viên, mã ca, hợp đồng, phiếu lương...</div>
+          <div className="topbar-actions">
+            <button type="button" aria-label="Thông báo">TB</button>
+            <button type="button" aria-label="Xuất dữ liệu">EX</button>
+            <button type="button" aria-label="Cài đặt">CFG</button>
+            <span className="profile">NV</span>
+          </div>
+        </header>
+
+        <section className="page-section hero-section" id="overview">
+          <div className="section-heading">
+            <p>SRS - Software Requirements Specification</p>
+            <h1>Hệ thống Quản lý Nhân sự NextX HRM cho nhà máy LSEV</h1>
+            <span>
+              Prototype giao diện Web PC cho HR Admin, TBP, Tổ trưởng và NLĐ self-service theo tài liệu
+              NextX_HRM_SRS_LSEV_v2.pdf.
+            </span>
+          </div>
+
+          <div className="metric-grid">
+            {metrics.map(([label, value, note]) => (
+              <article className="metric-card" key={label}>
+                <small>{label}</small>
+                <strong>{value}</strong>
+                <span>{note}</span>
+              </article>
+            ))}
+          </div>
+
+          <div className="module-board">
+            {modules.map((item) => (
+              <article className="module-card" key={item.code}>
+                <span>{item.code}</span>
+                <h3>{item.title}</h3>
+                <p>{item.scope}</p>
+                <small>{item.owner}</small>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="page-section" id="catalog">
+          <SectionTitle code="M01" title="Danh mục & Cấu hình hệ thống" note="Nền tảng cấu hình cho toàn bộ hệ thống." />
+          <div className="two-column">
+            <article className="panel">
+              <div className="panel-title">
+                <h3>Luồng thiết lập lần đầu</h3>
+                <button type="button">Lưu cấu hình</button>
+              </div>
+              <ol className="step-list">
+                {setupSteps.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ol>
+            </article>
+
+            <article className="panel">
+              <div className="panel-title">
+                <h3>Cây tổ chức LSEV</h3>
+                <button type="button">Thêm node</button>
+              </div>
+              <div className="org-tree">
+                <div>LSEV</div>
+                <div>Admin</div>
+                <div>Production</div>
+                <div>Production 3</div>
+                <div>Assembly</div>
+                <div>Assy 1 - Cost Center 481003</div>
+              </div>
+            </article>
+          </div>
+
+          <article className="panel">
+            <div className="panel-title">
+              <h3>Danh mục ca làm việc</h3>
+              <div className="segmented">
+                <button type="button">Ca</button>
+                <button type="button">Ký hiệu công</button>
+                <button type="button">Bậc lương</button>
+              </div>
+            </div>
+            <DataTable
+              headers={["Mã ca", "Tên ca", "Giờ vào", "Giờ ra", "Công", "Ghi chú"]}
+              rows={shifts}
+            />
+          </article>
+        </section>
+
+        <section className="page-section" id="employees">
+          <SectionTitle code="M02" title="Hồ sơ nhân viên" note="Quản lý từ gia nhập, quá trình làm việc đến thôi việc." />
+          <div className="toolbar">
+            <div className="filter-box">Tìm theo Mã NV, tên, CCCD, SĐT, email</div>
+            <button type="button">Import Excel</button>
+            <button type="button">Export có audit</button>
+            <button type="button" className="primary">Thêm nhân viên</button>
+          </div>
+          <article className="panel">
+            <DataTable
+              headers={["Mã NV", "Họ tên", "Khối", "Bộ phận", "Phân loại", "Trạng thái"]}
+              rows={employees}
+            />
+          </article>
+          <div className="form-grid">
+            <FormPanel
+              title="Thông tin cá nhân"
+              fields={["Mã nhân viên tự sinh", "Họ tên", "CCCD có che theo quyền", "Ngày sinh", "Số điện thoại", "Email"]}
+            />
+            <FormPanel
+              title="Thông tin công việc"
+              fields={["Chi nhánh", "Khối/Ban/Phòng/Bộ phận", "Chức danh", "Phân loại NV/CN", "Ngày vào", "Trạng thái"]}
+            />
+            <FormPanel
+              title="5 loại quá trình"
+              fields={["Công việc", "Lương cơ bản", "Phụ cấp", "Lương bảo hiểm", "Đánh giá KPI S/A/B/C/D"]}
+            />
+          </div>
+        </section>
+
+        <section className="page-section" id="contracts">
+          <SectionTitle code="M03" title="Hợp đồng lao động" note="Tự động hóa thử việc, học việc, ký và gia hạn HĐLĐ." />
+          <div className="two-column">
+            <article className="panel">
+              <div className="panel-title">
+                <h3>Quy trình hợp đồng</h3>
+                <button type="button">Tạo HĐLĐ</button>
+              </div>
+              <ol className="timeline">
+                {contractFlow.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ol>
+            </article>
+
+            <article className="panel">
+              <div className="panel-title">
+                <h3>Cảnh báo hết hạn</h3>
+                <button type="button">Xem tất cả</button>
+              </div>
+              <div className="alert-list">
+                <span><strong>30 ngày</strong> - 18 hợp đồng cần đánh giá</span>
+                <span><strong>15 ngày</strong> - 7 hợp đồng chờ quyết định</span>
+                <span><strong>7 ngày</strong> - 3 hợp đồng ưu tiên xử lý</span>
+              </div>
+            </article>
+          </div>
+          <article className="panel">
+            <DataTable
+              headers={["Loại", "Tên mẫu", "Ngôn ngữ", "Xuất file", "Trạng thái"]}
+              rows={[
+                ["HĐ-1", "Thỏa thuận thử việc", "VI-EN", "PDF, Word", "Đã nhận"],
+                ["HĐ-2", "Thỏa thuận học việc", "VI-EN", "PDF, Word", "Đã nhận"],
+                ["HĐ-3", "HĐLĐ xác định thời hạn", "VI-EN", "PDF, Word", "Đã nhận"],
+                ["HĐ-4", "HĐLĐ không xác định thời hạn", "VI-EN", "PDF, Word", "Đã nhận"],
+                ["PDPA", "Đồng ý xử lý dữ liệu cá nhân", "VI-EN", "PDF, Word", "Đã nhận"],
+              ]}
+            />
+          </article>
+        </section>
+
+        <section className="page-section" id="attendance">
+          <SectionTitle code="M04" title="Chấm công" note="Xếp ca, máy chấm công, nghỉ phép, OT tự động và báo cáo cuối tháng." />
+          <div className="phase-grid">
+            {attendancePhases.map(([number, title, desc]) => (
+              <article className="phase-card" key={number}>
+                <span>{number}</span>
+                <h3>{title}</h3>
+                <p>{desc}</p>
+              </article>
+            ))}
+          </div>
+          <div className="two-column">
+            <article className="panel">
+              <div className="panel-title">
+                <h3>Bảng xếp ca tháng</h3>
+                <button type="button">Import D1-D31</button>
+              </div>
+              <div className="schedule-grid">
+                {["00003", "00791", "01742", "02118"].map((emp, index) => (
+                  <div className="schedule-row" key={emp}>
+                    <strong>{emp}</strong>
+                    {["CA1", "CA1", "F", "CA2", "CA3+1", "HC", "OFF"].map((shift, day) => (
+                      <span key={`${emp}-${day}`} className={shift === "F" || shift === "OFF" ? "leave" : ""}>
+                        {shift}
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </article>
+            <article className="panel">
+              <div className="panel-title">
+                <h3>Quy tắc OT tự động</h3>
+                <button type="button">Mô phỏng</button>
+              </div>
+              <div className="formula-box">
+                <strong>OT/ngày</strong>
+                <span>(Giờ bắt đầu ca - Giờ đến thực tế) + (Giờ về thực tế - Giờ kết thúc ca)</span>
+                <small>Làm tròn xuống theo block 15 phút; tối thiểu mỗi lần OT là 0.5 giờ.</small>
+              </div>
+              <div className="rule-list">
+                <span>In: chấm công đầu tiên sau giờ đầu ca từ 4h trở lên</span>
+                <span>Out: chấm công cuối cùng trước giờ cuối ca từ 4h trở lên</span>
+                <span>CS: có dữ liệu công nhưng không xác định được +, In, Out và không có ký hiệu nghỉ</span>
+                <span>KP: không có dữ liệu công mặc dù có xếp ca</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section className="page-section" id="payroll">
+          <SectionTitle code="M05" title="Tiền lương" note="Engine lương đầy đủ cho gross, bảo hiểm, PIT, thực lĩnh và xuất file." />
+          <div className="payroll-layout">
+            <article className="panel">
+              <div className="panel-title">
+                <h3>Công thức cốt lõi</h3>
+                <button type="button">Tính lương</button>
+              </div>
+              <DataTable headers={["Khoản mục", "Công thức"]} rows={payrollRows} />
+            </article>
+            <aside className="panel">
+              <div className="panel-title">
+                <h3>Chốt & xuất</h3>
+              </div>
+              <div className="export-list">
+                <button type="button">Phiếu lương PDF từng NV</button>
+                <button type="button">Bảng tổng hợp lương 50+ cột</button>
+                <button type="button">Bảng tính OT</button>
+                <button type="button">Bảng tính PIT</button>
+                <button type="button">Bank list Vietinbank</button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section className="page-section" id="security">
+          <SectionTitle code="M06" title="Phân quyền & Đăng nhập" note="SSO, RBAC, row-level security và audit log không thể xóa." />
+          <article className="panel">
+            <DataTable headers={["Vai trò", "Phạm vi dữ liệu", "Quyền mặc định"]} rows={roles} />
+          </article>
+          <div className="two-column">
+            <FormPanel title="Cấu hình đăng nhập" fields={["Username/password", "SSO qua AD/LDAP", "Tự đăng xuất sau X phút", "Khóa tài khoản không hoạt động"]} />
+            <FormPanel title="Audit log" fields={["Ai thực hiện", "Thao tác gì", "Thời điểm", "Dữ liệu trước/sau", "Tìm theo module và khoảng thời gian"]} />
+          </div>
+        </section>
+
+        <section className="page-section" id="feedback">
+          <SectionTitle code="M07" title="Ý kiến nhân viên" note="NLĐ gửi thắc mắc về thông tin, công, lương; HR xử lý và phản hồi." />
+          <div className="feedback-layout">
+            <article className="panel">
+              <div className="panel-title">
+                <h3>Hàng đợi HR</h3>
+                <button type="button">Phản hồi</button>
+              </div>
+              <DataTable headers={["Loại ý kiến", "Trạng thái", "Nội dung"]} rows={feedbackItems} />
+            </article>
+            <article className="panel">
+              <div className="panel-title">
+                <h3>Form NLĐ gửi ý kiến</h3>
+              </div>
+              <form className="mock-form">
+                <label>Mã NV<input value="00003" readOnly /></label>
+                <label>Loại ý kiến<select defaultValue="attendance"><option value="profile">Thay đổi thông tin</option><option value="attendance">Thắc mắc công</option><option value="salary">Thắc mắc lương</option><option value="other">Khác</option></select></label>
+                <label>Nội dung<textarea defaultValue="Cần kiểm tra lại công ca đêm ngày 14/03." /></label>
+              </form>
+            </article>
+          </div>
+        </section>
+
+        <section className="page-section" id="quality">
+          <SectionTitle code="NFR" title="Yêu cầu phi chức năng" note="Các ràng buộc vận hành cần thể hiện trong thiết kế sản phẩm." />
+          <div className="nfr-grid">
+            {nfrs.map(([title, desc]) => (
+              <article className="nfr-card" key={title}>
+                <h3>{title}</h3>
+                <p>{desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      </section>
+    </main>
+  );
+}
+
+function AuthScreen({ onEnter }: { onEnter: () => void }) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    onEnter();
+  }
+
+  return (
+    <main className="auth-shell">
+      <section className="auth-brand-panel">
+        <div className="auth-brand-inner">
+          <div className="auth-logo">
+            <span>NX</span>
+            <strong>nextX HRM</strong>
+          </div>
+
+          <div className="auth-copy">
+            <p>LSEV Workforce Platform</p>
+            <h1>
+              Quản lý nhân sự nhà máy trên một hệ thống thống nhất
+            </h1>
+            <span>
+              Hồ sơ, hợp đồng, ca kíp, chấm công, tiền lương, phân quyền và phản hồi người
+              lao động được vận hành trong cùng một console.
+            </span>
+          </div>
+
+          <div className="auth-preview">
+            <div className="preview-header">
+              <div>
+                <strong>Vận hành hôm nay</strong>
+                <small>Thứ Năm, 07/05/2026</small>
+              </div>
+              <span>Live</span>
+            </div>
+            <div className="preview-grid">
+              <article>
+                <small>Ca đang chạy</small>
+                <strong>CA2</strong>
+                <span>14:00 - 22:00</span>
+              </article>
+              <article>
+                <small>Đơn nghỉ chờ duyệt</small>
+                <strong>11</strong>
+                <span>3 cấp phê duyệt</span>
+              </article>
+              <article>
+                <small>OT tự động</small>
+                <strong>8 loại</strong>
+                <span>Làm tròn 15 phút</span>
+              </article>
+              <article>
+                <small>Kỳ lương</small>
+                <strong>05/2026</strong>
+                <span>Chờ chốt</span>
+              </article>
+            </div>
+          </div>
+
+          <div className="auth-trust-row">
+            <span>SSO / AD-LDAP</span>
+            <span>RBAC</span>
+            <span>Audit log</span>
+            <span>PDPA</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="auth-form-panel">
+        <form className="auth-card" onSubmit={handleSubmit}>
+          <div className="auth-title">
+            <span>Chào mừng trở lại</span>
+            <h2>Đăng nhập</h2>
+            <p>Truy cập console quản trị nhân sự NextX HRM.</p>
+          </div>
+
+          <button className="auth-social" type="button" onClick={onEnter}>
+            <span>G</span>
+            Đăng nhập với Google
+          </button>
+          <button className="auth-social" type="button" onClick={onEnter}>
+            <span>SSO</span>
+            Đăng nhập qua SSO LSEV
+          </button>
+
+          <div className="auth-divider">
+            <span>Hoặc</span>
+          </div>
+
+          <label className="auth-field">
+            Email
+            <input type="email" placeholder="hr.admin@lsev.vn" />
+          </label>
+
+          <label className="auth-field">
+            Mật khẩu
+            <div className="password-field">
+              <input type="password" placeholder="••••••••" />
+              <span>Ẩn</span>
+            </div>
+          </label>
+
+          <div className="auth-options">
+            <label>
+              <input type="checkbox" />
+              Nhớ tôi
+            </label>
+            <a href="#forgot">Quên mật khẩu?</a>
+          </div>
+
+          <button className="auth-submit" type="submit">
+            Tiếp tục
+          </button>
+
+          <p className="auth-legal">
+            Demo UI: nhập email và mật khẩu bất kỳ để vào hệ thống.
+          </p>
+        </form>
+      </section>
+    </main>
+  );
+}
+
+function SectionTitle({ code, title, note }: { code: string; title: string; note: string }) {
+  return (
+    <div className="section-title">
+      <span>{code}</span>
+      <div>
+        <h2>{title}</h2>
+        <p>{note}</p>
+      </div>
+    </div>
+  );
+}
+
+function DataTable({ headers, rows }: { headers: string[]; rows: string[][] }) {
+  return (
+    <div className="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            {headers.map((header) => (
+              <th key={header}>{header}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, rowIndex) => (
+            <tr key={`${row[0]}-${rowIndex}`}>
+              {row.map((cell, cellIndex) => (
+                <td key={`${cell}-${cellIndex}`}>{cell}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function FormPanel({ title, fields }: { title: string; fields: string[] }) {
+  return (
+    <article className="panel form-panel">
+      <div className="panel-title">
+        <h3>{title}</h3>
+      </div>
+      <div className="field-list">
+        {fields.map((field) => (
+          <label key={field}>
+            <span>{field}</span>
+            <input placeholder="Nhập dữ liệu" />
+          </label>
+        ))}
+      </div>
+    </article>
+  );
+}
