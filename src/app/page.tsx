@@ -469,15 +469,15 @@ function DashboardScreen() {
   const [overviewTab, setOverviewTab] = useState<"dashboard" | "calendar">("dashboard");
 
   const sidebarItems = [
-    { icon: "⌘", label: "Tổng quan", active: activeModule === "overview" },
-    { icon: "👥", label: "Hồ sơ nhân viên", active: activeModule === "employees" },
-    { icon: "✈", label: "Nghỉ phép", active: false },
-    { icon: "▣", label: "Chấm công", active: false },
-    { icon: "$", label: "Tiền lương", active: false },
-    { icon: "◇", label: "Đào tạo", active: false },
-    { icon: "♡", label: "Phúc lợi", active: false },
-    { icon: "▥", label: "Báo cáo", active: false },
-    { icon: "⚙", label: "Cài đặt", active: false },
+    { icon: "overview", label: "Tổng quan", active: activeModule === "overview" },
+    { icon: "employees", label: "Hồ sơ nhân viên", active: activeModule === "employees" },
+    { icon: "leave", label: "Nghỉ phép", active: false },
+    { icon: "attendance", label: "Chấm công", active: false },
+    { icon: "payroll", label: "Tiền lương", active: false },
+    { icon: "training", label: "Đào tạo", active: false },
+    { icon: "benefits", label: "Phúc lợi", active: false },
+    { icon: "reports", label: "Báo cáo", active: false },
+    { icon: "settings", label: "Cài đặt", active: false },
   ];
 
   const kpis = [
@@ -640,7 +640,7 @@ function DashboardScreen() {
                 setActiveModule("overview");
               }}
             >
-              <span>{icon}</span>
+              <span className="menu-icon"><MenuIcon name={icon} /></span>
               <strong>{label}</strong>
               <em>›</em>
             </a>
@@ -677,7 +677,7 @@ function DashboardScreen() {
                 }
               }}
             >
-              <span>{icon}</span>
+              <span className="menu-icon"><MenuIcon name={icon} /></span>
               <strong>{label}</strong>
               <em>›</em>
             </a>
@@ -1039,6 +1039,82 @@ function DashboardScreen() {
         </div>
       </section>
     </main>
+  );
+}
+
+function MenuIcon({ name }: { name: string }) {
+  const common = {
+    fill: "none",
+    stroke: "currentColor",
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    strokeWidth: 2,
+  };
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      {name === "overview" ? (
+        <>
+          <rect x="4" y="4" width="6" height="6" rx="1.5" {...common} />
+          <rect x="14" y="4" width="6" height="6" rx="1.5" {...common} />
+          <rect x="4" y="14" width="6" height="6" rx="1.5" {...common} />
+          <rect x="14" y="14" width="6" height="6" rx="1.5" {...common} />
+        </>
+      ) : null}
+      {name === "employees" ? (
+        <>
+          <path d="M16 19c0-2.2-1.8-4-4-4H8c-2.2 0-4 1.8-4 4" {...common} />
+          <circle cx="10" cy="8" r="3" {...common} />
+          <path d="M20 19c0-1.9-1.2-3.4-3-3.9" {...common} />
+          <path d="M15.5 5.2a3 3 0 0 1 0 5.6" {...common} />
+        </>
+      ) : null}
+      {name === "leave" ? (
+        <>
+          <path d="M4 13l15-8-6 15-3-6-6-1z" {...common} />
+          <path d="M10 14l4-4" {...common} />
+        </>
+      ) : null}
+      {name === "attendance" ? (
+        <>
+          <rect x="5" y="3" width="14" height="18" rx="2" {...common} />
+          <path d="M9 7h6M9 11h6M9 15h3" {...common} />
+        </>
+      ) : null}
+      {name === "payroll" ? (
+        <>
+          <path d="M12 2v20" {...common} />
+          <path d="M17 6.5c-.7-1-2-1.5-4-1.5-2.5 0-4 1.1-4 2.8 0 4.1 8 1.8 8 6.4 0 1.8-1.7 3-4.5 3-2.2 0-3.8-.7-4.8-1.9" {...common} />
+        </>
+      ) : null}
+      {name === "training" ? (
+        <>
+          <path d="M3 8l9-4 9 4-9 4-9-4z" {...common} />
+          <path d="M7 10.5v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-4" {...common} />
+          <path d="M21 8v6" {...common} />
+        </>
+      ) : null}
+      {name === "benefits" ? (
+        <>
+          <path d="M20.4 5.6a5 5 0 0 0-7.1 0L12 6.9l-1.3-1.3a5 5 0 0 0-7.1 7.1L12 21l8.4-8.3a5 5 0 0 0 0-7.1z" {...common} />
+        </>
+      ) : null}
+      {name === "reports" ? (
+        <>
+          <path d="M4 19V5" {...common} />
+          <path d="M8 19v-7" {...common} />
+          <path d="M12 19V9" {...common} />
+          <path d="M16 19v-4" {...common} />
+          <path d="M20 19H3" {...common} />
+        </>
+      ) : null}
+      {name === "settings" ? (
+        <>
+          <circle cx="12" cy="12" r="3" {...common} />
+          <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-2 .4l-.2.2a1.7 1.7 0 0 0-.5 1.1H9.1a1.7 1.7 0 0 0-.5-1.1l-.2-.2a1.7 1.7 0 0 0-2-.4l-.2.1-2-3.4.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3v-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 2-.4l.2-.2A1.7 1.7 0 0 0 9.1 2h5.8a1.7 1.7 0 0 0 .5 1.1l.2.2a1.7 1.7 0 0 0 2 .4l.2-.1 2 3.4-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.1v4h-.1a1.7 1.7 0 0 0-1.5 1z" {...common} />
+        </>
+      ) : null}
+    </svg>
   );
 }
 

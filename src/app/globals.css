@@ -543,11 +543,23 @@ a {
 
 .home-nav a span {
   color: #64748b;
-  font-size: 18px;
 }
 
 .home-nav a.active span {
-  color: #6475ff;
+  color: #0f8f45;
+}
+
+.menu-icon {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+}
+
+.menu-icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
 .home-nav a strong,
