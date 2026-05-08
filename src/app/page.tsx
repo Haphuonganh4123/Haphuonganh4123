@@ -465,11 +465,12 @@ export default function Home() {
 }
 
 function DashboardScreen() {
+  const [activeModule, setActiveModule] = useState<"overview" | "employees">("overview");
   const [overviewTab, setOverviewTab] = useState<"dashboard" | "calendar">("dashboard");
 
   const sidebarItems = [
-    { icon: "⌘", label: "Tổng quan", active: true },
-    { icon: "👥", label: "Hồ sơ nhân viên", active: false },
+    { icon: "⌘", label: "Tổng quan", active: activeModule === "overview" },
+    { icon: "👥", label: "Hồ sơ nhân viên", active: activeModule === "employees" },
     { icon: "✈", label: "Nghỉ phép", active: false },
     { icon: "▣", label: "Chấm công", active: false },
     { icon: "$", label: "Tiền lương", active: false },
@@ -630,30 +631,52 @@ function DashboardScreen() {
 
         <nav className="home-nav" aria-label="Dashboard navigation">
           {sidebarItems.slice(0, 1).map(({ icon, label, active }) => (
-            <a className={active ? "active" : ""} href="#dashboard" key={label}>
+            <a
+              className={active ? "active" : ""}
+              href="#dashboard"
+              key={label}
+              onClick={(event) => {
+                event.preventDefault();
+                setActiveModule("overview");
+              }}
+            >
               <span>{icon}</span>
               <strong>{label}</strong>
               <em>›</em>
             </a>
           ))}
-          <button
-            className={`home-subnav ${overviewTab === "dashboard" ? "" : "muted"}`}
-            type="button"
-            onClick={() => setOverviewTab("dashboard")}
-          >
-            <span />
-            <strong>Dashboard</strong>
-          </button>
-          <button
-            className={`home-subnav ${overviewTab === "calendar" ? "" : "muted"}`}
-            type="button"
-            onClick={() => setOverviewTab("calendar")}
-          >
-            <span />
-            <strong>Lịch sự kiện</strong>
-          </button>
+          {activeModule === "overview" ? (
+            <>
+              <button
+                className={`home-subnav ${overviewTab === "dashboard" ? "" : "muted"}`}
+                type="button"
+                onClick={() => setOverviewTab("dashboard")}
+              >
+                <span />
+                <strong>Dashboard</strong>
+              </button>
+              <button
+                className={`home-subnav ${overviewTab === "calendar" ? "" : "muted"}`}
+                type="button"
+                onClick={() => setOverviewTab("calendar")}
+              >
+                <span />
+                <strong>Lịch sự kiện</strong>
+              </button>
+            </>
+          ) : null}
           {sidebarItems.slice(1).map(({ icon, label, active }) => (
-            <a className={active ? "active" : ""} href="#dashboard" key={label}>
+            <a
+              className={active ? "active" : ""}
+              href="#dashboard"
+              key={label}
+              onClick={(event) => {
+                if (label === "Hồ sơ nhân viên") {
+                  event.preventDefault();
+                  setActiveModule("employees");
+                }
+              }}
+            >
               <span>{icon}</span>
               <strong>{label}</strong>
               <em>›</em>
@@ -704,6 +727,10 @@ function DashboardScreen() {
         </header>
 
         <div className="home-content" id="dashboard">
+          {activeModule === "employees" ? (
+            <EmployeeProfileSection />
+          ) : (
+            <>
           <section className="home-hero-row">
             <div>
               <h1>{overviewTab === "dashboard" ? "Chào buổi sáng, HR Admin 👋" : "Lịch sự kiện nhân sự"}</h1>
@@ -1007,9 +1034,158 @@ function DashboardScreen() {
               </aside>
             </section>
           )}
+            </>
+          )}
         </div>
       </section>
     </main>
+  );
+}
+
+function EmployeeProfileSection() {
+  const employeeStats = [
+    ["300", "Tổng hồ sơ", "292 đang làm việc"],
+    ["18", "Hồ sơ cần bổ sung", "CCCD, tài khoản NH, NPT"],
+    ["08", "Sắp hết thử việc", "Cần đánh giá trong 7 ngày"],
+    ["05", "Thôi việc tháng này", "Đang chờ hoàn tất bàn giao"],
+  ];
+
+  const employees = [
+    ["00003", "Nguyễn Văn An", "Production 3", "Assy 1", "Công nhân", "Đang làm việc"],
+    ["00791", "Trần Thị Bình", "HR", "HR", "Nhân viên", "Thử việc"],
+    ["01742", "Lê Minh Châu", "Accounting", "Accounting", "Nhân viên", "Đang làm việc"],
+    ["02118", "Phạm Quốc Dũng", "Molding", "Molding Engineer", "Công nhân", "Học việc"],
+    ["02409", "Đỗ Thị Hà", "Production 1", "Line 2", "Công nhân", "Nghỉ thai sản"],
+    ["03122", "Hoàng Minh Đức", "IT", "System", "Nhân viên", "Đang làm việc"],
+  ];
+
+  const profileFields = [
+    ["Mã nhân viên", "00003"],
+    ["Ngày vào", "12/02/2024"],
+    ["Loại lao động", "Công nhân"],
+    ["Bộ phận", "Production 3 / Assy 1"],
+    ["Chức danh", "Assembly Operator"],
+    ["Bậc lương", "WK1 · áp dụng 2026"],
+  ];
+
+  const processItems = [
+    ["Lương cơ bản", "5.630.000đ", "Hiệu lực 01/01/2026"],
+    ["Phụ cấp Housing", "300.000đ", "Quản lý theo quá trình"],
+    ["KPI", "Loại A · 110%", "Áp dụng từ T01/2026"],
+    ["HĐLĐ", "Xác định thời hạn", "Cảnh báo trước 30 ngày"],
+  ];
+
+  return (
+    <>
+      <section className="employee-hero">
+        <div>
+          <h1>Hồ sơ nhân viên</h1>
+          <p>Quản lý vòng đời nhân sự: thông tin cá nhân, công việc, quá trình, hợp đồng và thôi việc.</p>
+        </div>
+        <div className="employee-actions">
+          <button type="button">Import Excel</button>
+          <button type="button">Xuất danh sách</button>
+          <button type="button" className="primary-action">Thêm nhân viên</button>
+        </div>
+      </section>
+
+      <section className="employee-stat-row">
+        {employeeStats.map(([value, label, note]) => (
+          <article className="employee-stat-card" key={label}>
+            <strong>{value}</strong>
+            <span>{label}</span>
+            <small>{note}</small>
+          </article>
+        ))}
+      </section>
+
+      <section className="employee-workspace">
+        <article className="dashboard-panel employee-list-panel">
+          <div className="employee-toolbar">
+            <label>
+              <span>⌕</span>
+              <input placeholder="Tìm mã NV, họ tên, CCCD, SĐT..." />
+            </label>
+            <select defaultValue="all">
+              <option value="all">Tất cả trạng thái</option>
+              <option value="active">Đang làm việc</option>
+              <option value="probation">Thử việc / học việc</option>
+              <option value="leave">Nghỉ dài hạn</option>
+            </select>
+            <select defaultValue="all">
+              <option value="all">Tất cả bộ phận</option>
+              <option value="production">Production</option>
+              <option value="hr">HR</option>
+              <option value="accounting">Accounting</option>
+            </select>
+          </div>
+
+          <div className="employee-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mã NV</th>
+                  <th>Họ tên</th>
+                  <th>Khối</th>
+                  <th>Bộ phận</th>
+                  <th>Phân loại</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                {employees.map((row, index) => (
+                  <tr className={index === 0 ? "selected" : ""} key={row[0]}>
+                    {row.map((cell, cellIndex) => (
+                      <td key={`${row[0]}-${cellIndex}`}>
+                        {cellIndex === 5 ? <span className="employee-status-pill">{cell}</span> : cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <aside className="dashboard-panel employee-detail-panel">
+          <div className="employee-profile-head">
+            <span>NA</span>
+            <div>
+              <h2>Nguyễn Văn An</h2>
+              <p>00003 · Production 3 / Assy 1</p>
+            </div>
+          </div>
+
+          <div className="employee-tabs">
+            <button type="button" className="active">Tổng quan</button>
+            <button type="button">Quá trình</button>
+            <button type="button">Hợp đồng</button>
+          </div>
+
+          <div className="profile-field-grid">
+            {profileFields.map(([label, value]) => (
+              <div key={label}>
+                <span>{label}</span>
+                <strong>{value}</strong>
+              </div>
+            ))}
+          </div>
+
+          <div className="process-card-list">
+            <h3>Quá trình hiện hành</h3>
+            {processItems.map(([label, value, note]) => (
+              <article key={label}>
+                <div>
+                  <span>{label}</span>
+                  <strong>{value}</strong>
+                </div>
+                <small>{note}</small>
+              </article>
+            ))}
+          </div>
+        </aside>
+      </section>
+    </>
   );
 }
 
