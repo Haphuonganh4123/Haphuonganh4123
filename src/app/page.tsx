@@ -480,12 +480,12 @@ function DashboardScreen() {
   ];
 
   const kpis = [
-    ["👥", "1,000", "Tổng nhân sự", "31 bộ phận đang vận hành", "+18 tháng này", "green"],
-    ["◷", "94.8%", "Chấm công hôm nay", "67 lượt cần rà soát", "Real-time", "blue"],
-    ["✈", "24", "Đơn nghỉ chờ duyệt", "12 đơn quá 1 cấp duyệt", "Cần xử lý", "cyan"],
-    ["▤", "36", "Hợp đồng sắp hết hạn", "Trong 30 ngày tới", "Ưu tiên", "violet"],
-    ["$", "05/2026", "Kỳ lương đang mở", "120 phiếu chờ kiểm tra", "Payroll", "amber"],
-    ["♡", "18", "Ý kiến NLĐ mới", "Công, lương, hồ sơ cá nhân", "Phản hồi", "red"],
+    ["👥", "300", "Tổng Nhân Viên", "5 phòng ban", "+12 tháng này", "green"],
+    ["▣", "292", "Đang Làm Việc", "97% tổng nhân sự", "97.3%", "blue"],
+    ["▤", "5", "Phòng Ban", "4 chi nhánh", "", "cyan"],
+    ["◷", "92.5%", "Tỷ Lệ Chấm Công", "8.3% đi muộn", "+2.1%", "violet"],
+    ["$", "28 triệu", "Lương TB / Người", "VNĐ / tháng", "", "amber"],
+    ["☹", "1.3%", "Tỷ Lệ Nghỉ Việc", "4 người đã nghỉ", "1.3%", "red"],
   ];
 
   const quickActions = [
@@ -511,6 +511,55 @@ function DashboardScreen() {
     ["Lương & PIT", "Định mức 2026 đã áp dụng"],
     ["Mobile App", "Self-service online 24/7"],
     ["Audit log", "Không có cảnh báo bất thường"],
+  ];
+
+  const departmentBars = [
+    { code: "IT", name: "Công Nghệ Thông Tin", value: 66, color: "#15803d" },
+    { code: "HR", name: "Nhân Sự", value: 55, color: "#5146e5" },
+    { code: "FIN", name: "Tài Chính", value: 48, color: "#1396ad" },
+    { code: "MKT", name: "Marketing", value: 73, color: "#c2185b" },
+    { code: "SALES", name: "Kinh Doanh", value: 58, color: "#7c3aed" },
+  ];
+
+  const branchRows = [
+    ["TP.HCM", "76", "25%", "#15803d"],
+    ["Hà Nội", "80", "27%", "#5146e5"],
+    ["Đà Nẵng", "75", "25%", "#1396ad"],
+    ["Cần Thơ", "69", "23%", "#b45309"],
+  ];
+
+  const levels = [
+    ["Intern", "35", "#94a3b8"],
+    ["Fresher", "53", "#64748b"],
+    ["Junior", "27", "#7c3aed"],
+    ["Middle", "34", "#0891b2"],
+    ["Senior", "41", "#15803d"],
+    ["Lead", "38", "#b45309"],
+    ["Manager", "36", "#8b5cf6"],
+    ["Director", "36", "#ef4444"],
+  ];
+
+  const notifications = [
+    ["warning", "12 đơn nghỉ phép chờ duyệt", "Cần phê duyệt trong 24h"],
+    ["info", "120 bảng lương cần xử lý", "Hạn chót cuối tháng"],
+    ["success", "0 nhân viên mới tháng này", "Cần hoàn thiện hồ sơ"],
+    ["danger", "Tỷ lệ đi muộn 8.3%", "Cao hơn tháng trước 1.2%"],
+  ];
+
+  const performanceRows = [
+    ["Xuất sắc", "66", "22%", "#15803d"],
+    ["Tốt", "123", "41%", "#10b981"],
+    ["Trung bình", "84", "28%", "#f59e0b"],
+    ["Dưới TB", "21", "7%", "#ef4444"],
+    ["Kém", "6", "2%", "#dc2626"],
+  ];
+
+  const orgLeaders = [
+    ["TV", "Trần Văn Hùng", "Trưởng Phòng CNTT", "72 người", "#5146e5"],
+    ["VT", "Vũ Thị Mai", "Trưởng Phòng Nhân Sự", "18 người", "#1396ad"],
+    ["ĐH", "Đỗ Hồng Quân", "Trưởng Phòng Tài Chính", "25 người", "#b45309"],
+    ["HT", "Hồ Thị Vy", "Trưởng Phòng Marketing", "30 người", "#c2185b"],
+    ["NT", "Nguyễn Thanh Cường", "Trưởng Phòng Kinh Doanh", "65 người", "#7c3aed"],
   ];
 
   const calendarStats = [
@@ -694,49 +743,209 @@ function DashboardScreen() {
           </section>
 
           {overviewTab === "dashboard" ? (
-            <section className="dashboard-grid">
-              <article className="dashboard-panel chart-panel">
-                <div className="panel-heading">
-                  <h2>Lối tắt nghiệp vụ hôm nay</h2>
-                  <p>Những màn HR Admin dùng thường xuyên để vận hành nhân sự nhà máy.</p>
-                </div>
-                <div className="srs-module-list">
-                  {quickActions.map(([title, desc, action], index) => (
-                    <article key={title}>
-                      <span>{String(index + 1).padStart(2, "0")}</span>
-                      <div>
-                        <h3>{title}</h3>
-                        <p>{desc}</p>
-                      </div>
-                      <small>{action}</small>
-                    </article>
-                  ))}
-                </div>
-              </article>
-
-              <aside className="side-panels">
-                <article className="dashboard-panel scope-panel">
-                  <h2>Việc cần xử lý</h2>
-                  <div className="scope-list">
-                    {pendingTasks.map((item) => (
-                      <span key={item}>{item}</span>
-                    ))}
+            <>
+              <section className="overview-grid">
+                <article className="dashboard-panel analytics-card department-card">
+                  <div className="panel-heading">
+                    <h2>Phân Bổ Nhân Sự Theo Phòng Ban</h2>
+                    <p>Số lượng nhân viên tại từng phòng ban</p>
                   </div>
-                </article>
-
-                <article className="dashboard-panel role-panel">
-                  <h2>Trạng thái vận hành</h2>
-                  <div className="role-list">
-                    {healthItems.map(([name, note]) => (
-                      <span key={name}>
-                        <strong>{name}</strong>
-                        <small>{note}</small>
+                  <div className="dept-chart">
+                    <div className="dept-scale">
+                      <span>80</span>
+                      <span>60</span>
+                      <span>40</span>
+                      <span>20</span>
+                      <span>0</span>
+                    </div>
+                    <div className="dept-bars">
+                      {departmentBars.map((item) => (
+                        <div className="dept-bar" key={item.code}>
+                          <span style={{ height: `${item.value * 2.45}px`, background: item.color }} />
+                          <small>{item.code}</small>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="chart-legend">
+                    {departmentBars.map((item) => (
+                      <span key={item.code}>
+                        <i style={{ background: item.color }} />
+                        {item.name} <strong>({item.value})</strong>
                       </span>
                     ))}
                   </div>
                 </article>
-              </aside>
-            </section>
+
+                <aside className="overview-side">
+                  <article className="dashboard-panel employee-status">
+                    <h2>Trạng Thái Nhân Viên</h2>
+                    <div className="status-body">
+                      <div className="donut-chart" />
+                      <div className="status-list">
+                        <span><i className="green-dot" />Đang làm <strong>292</strong></span>
+                        <span><i className="orange-dot" />Đang nghỉ phép <strong>4</strong></span>
+                        <span><i className="red-dot" />Đã nghỉ việc <strong>4</strong></span>
+                      </div>
+                    </div>
+                  </article>
+
+                  <article className="dashboard-panel contract-panel">
+                    <h2>Loại Hợp Đồng</h2>
+                    <div className="contract-row"><span>Toàn thời gian</span><strong>271 (90%)</strong></div>
+                    <div className="progress"><span style={{ width: "90%" }} /></div>
+                    <div className="contract-row"><span>Hợp đồng</span><strong>13 (4%)</strong></div>
+                    <div className="progress purple"><span style={{ width: "4%" }} /></div>
+                    <div className="contract-row"><span>Thực tập</span><strong>16 (5%)</strong></div>
+                    <div className="progress orange"><span style={{ width: "5%" }} /></div>
+                  </article>
+                </aside>
+              </section>
+
+              <section className="overview-grid">
+                <article className="dashboard-panel analytics-card trend-card">
+                  <div className="panel-heading">
+                    <h2>Xu Hướng Chấm Công 7 Ngày Qua</h2>
+                    <p>Đúng giờ · Đi muộn · Vắng mặt</p>
+                  </div>
+                  <div className="line-chart">
+                    <svg viewBox="0 0 760 230" role="img" aria-label="Xu hướng chấm công">
+                      <path d="M28 36 C120 31 185 26 270 36 S430 42 520 34 S665 42 736 36" fill="none" stroke="#10b981" strokeWidth="4" />
+                      <path d="M28 184 C120 180 190 178 270 184 S430 174 520 178 S650 184 736 181" fill="none" stroke="#f59e0b" strokeWidth="4" />
+                      <path d="M28 36 C120 31 185 26 270 36 S430 42 520 34 S665 42 736 36 L736 207 L28 207 Z" fill="rgba(16,185,129,0.08)" />
+                      {[0, 1, 2, 3, 4].map((line) => (
+                        <line key={line} x1="28" x2="736" y1={36 + line * 43} y2={36 + line * 43} stroke="#e2e8f0" strokeDasharray="4 6" />
+                      ))}
+                      <circle cx="392" cy="34" r="6" fill="#10b981" stroke="#ffffff" strokeWidth="3" />
+                      <circle cx="392" cy="178" r="5" fill="#f59e0b" stroke="#ffffff" strokeWidth="3" />
+                    </svg>
+                    <div className="trend-tooltip">
+                      <strong>Th 3, ngày 5</strong>
+                      <span>Đúng giờ: 257</span>
+                      <small>Đi muộn: 22</small>
+                    </div>
+                  </div>
+                  <div className="mini-legend">
+                    <span><i className="green-dot" />Đúng giờ</span>
+                    <span><i className="orange-dot" />Đi muộn</span>
+                  </div>
+                </article>
+
+                <aside className="overview-side">
+                  <article className="dashboard-panel branch-panel">
+                    <h2>Phân Bổ Theo Chi Nhánh</h2>
+                    <p>4 chi nhánh trên toàn quốc</p>
+                    {branchRows.map(([name, value, percent, color]) => (
+                      <div className="branch-row" key={name}>
+                        <div><span>{name}</span><strong>{value} ({percent})</strong></div>
+                        <div className="progress"><span style={{ width: percent, background: color }} /></div>
+                      </div>
+                    ))}
+                    <div className="gender-box">
+                      <h3>Tỷ Lệ Giới Tính</h3>
+                      <div className="progress purple"><span style={{ width: "48%" }} /></div>
+                      <div><span>Nam <strong>145 (48%)</strong></span><span>Nữ <strong>155 (52%)</strong></span></div>
+                    </div>
+                  </article>
+                </aside>
+              </section>
+
+              <section className="overview-grid">
+                <article className="dashboard-panel analytics-card movement-card">
+                  <div className="panel-heading">
+                    <h2>Biến Động Nhân Sự 6 Tháng Qua</h2>
+                    <p>Nhân viên mới và nghỉ việc theo tháng</p>
+                  </div>
+                  <div className="movement-chart">
+                    {["Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"].map((month, index) => (
+                      <div className="movement-col" key={month}>
+                        <div>
+                          {index === 0 ? <span className="join" style={{ height: 84 }} /> : null}
+                          {[0, 1, 2].includes(index) ? <span className="leave" style={{ height: [104, 45, 63][index] }} /> : null}
+                        </div>
+                        <small>{month}</small>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mini-legend">
+                    <span><i className="green-dot" />Nhân viên mới</span>
+                    <span><i className="red-dot" />Nghỉ việc</span>
+                  </div>
+                </article>
+
+                <aside className="overview-side">
+                  <article className="dashboard-panel level-panel">
+                    <h2>Phân Tầng Cấp Bậc</h2>
+                    <p>Cơ cấu trình độ nhân sự</p>
+                    {levels.map(([level, value, color]) => (
+                      <div className="level-row" key={level}>
+                        <span>{level}</span>
+                        <div><i style={{ width: `${Number(value) * 2}px`, background: color }}>{value}</i></div>
+                      </div>
+                    ))}
+                  </article>
+                </aside>
+              </section>
+
+              <section className="overview-three">
+                <article className="dashboard-panel summary-card">
+                  <h2>Tổng Quan Tiền Lương</h2>
+                  <p>Tháng 01/2026</p>
+                  <div className="summary-list">
+                    <span><i>$</i><small>Tổng chi lương</small><strong>8.4 tỷ</strong></span>
+                    <span><i>▥</i><small>Lương trung bình</small><strong>28 triệu</strong></span>
+                    <span><i>✓</i><small>Đã thanh toán</small><strong>150 / 300</strong></span>
+                    <span><i>!</i><small>Chờ xử lý</small><strong>120 bảng lương</strong></span>
+                  </div>
+                </article>
+
+                <article className="dashboard-panel notice-card">
+                  <h2>Thông Báo Quan Trọng</h2>
+                  <p>Cần xử lý sớm</p>
+                  <div className="notice-list">
+                    {notifications.map(([tone, title, note]) => (
+                      <span className={tone} key={title}><strong>{title}</strong><small>{note}</small><em>›</em></span>
+                    ))}
+                  </div>
+                </article>
+
+                <article className="dashboard-panel performance-card">
+                  <h2>Đánh Giá Hiệu Suất</h2>
+                  <p>Kết quả năm 2025</p>
+                  {performanceRows.map(([label, value, percent, color]) => (
+                    <div className="performance-row" key={label}>
+                      <div><span>{label}</span><strong>{value} ({percent})</strong></div>
+                      <div className="progress"><span style={{ width: percent, background: color }} /></div>
+                    </div>
+                  ))}
+                  <div className="performance-note">63% nhân viên đạt loại Tốt trở lên</div>
+                </article>
+              </section>
+
+              <section className="dashboard-panel org-card">
+                <div className="panel-heading">
+                  <h2>Sơ Đồ Tổ Chức</h2>
+                  <p>Cấu trúc phòng ban & lãnh đạo hiện tại</p>
+                </div>
+                <div className="org-root">
+                  <span>NM</span>
+                  <strong>Nguyễn Minh Tuấn</strong>
+                  <small>Giám Đốc Điều Hành (CEO)</small>
+                  <em>300 người</em>
+                </div>
+                <div className="org-line" />
+                <div className="org-branches">
+                  {orgLeaders.map(([abbr, name, title, count, color]) => (
+                    <article key={abbr} style={{ borderColor: String(color) }}>
+                      <span style={{ background: String(color) }}>{abbr}</span>
+                      <strong>{name}</strong>
+                      <small>{title}</small>
+                      <em>{count}</em>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            </>
           ) : (
             <section className="calendar-layout">
               <article className="dashboard-panel calendar-panel">
