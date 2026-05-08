@@ -465,6 +465,8 @@ export default function Home() {
 }
 
 function DashboardScreen() {
+  const [overviewTab, setOverviewTab] = useState<"dashboard" | "calendar">("dashboard");
+
   const sidebarItems = [
     { icon: "⌘", label: "Tổng quan", active: true },
     { icon: "👥", label: "Hồ sơ nhân viên", active: false },
@@ -511,6 +513,67 @@ function DashboardScreen() {
     ["Audit log", "Không có cảnh báo bất thường"],
   ];
 
+  const calendarStats = [
+    ["▣", "16", "Sự kiện tháng này", "Ca, nghỉ, hợp đồng, lương", "Tháng 05", "green"],
+    ["✈", "07", "Lịch nghỉ tuần này", "3 đơn đã duyệt, 4 đơn chờ", "Nghỉ phép", "blue"],
+    ["▤", "08", "HĐ cần đánh giá", "Thử việc/học việc sắp hết hạn", "Hợp đồng", "cyan"],
+    ["$", "20/05", "Chốt bảng công", "Khóa dữ liệu tính lương", "Payroll", "violet"],
+    ["◇", "03", "Lịch đào tạo", "An toàn, nội quy, kỹ năng", "Training", "amber"],
+    ["◷", "05", "Thay đổi ca", "Ca đêm và ca vắt +1", "Xếp ca", "red"],
+  ];
+
+  const calendarDays = [
+    ["28", "prev", []],
+    ["29", "prev", []],
+    ["30", "prev", []],
+    ["01", "current", ["Nghỉ lễ", "CA3 kiểm tra"]],
+    ["02", "current", ["Nghỉ lễ"]],
+    ["03", "current", []],
+    ["04", "current", []],
+    ["05", "current", ["Đào tạo CN mới"]],
+    ["06", "current", ["Chốt HĐ thử việc"]],
+    ["07", "current", ["Duyệt nghỉ tổ Assy"]],
+    ["08", "current today", ["Payroll review", "23 thiếu Out"]],
+    ["09", "current", ["Báo cáo công tuần"]],
+    ["10", "current", []],
+    ["11", "current", []],
+    ["12", "current", ["Import ca tháng"]],
+    ["13", "current", ["Đánh giá học việc"]],
+    ["14", "current", ["CA3 vắt +1"]],
+    ["15", "current", ["Nhắc HĐ hết hạn"]],
+    ["16", "current", ["Chốt OT tuần"]],
+    ["17", "current", []],
+    ["18", "current", []],
+    ["19", "current", ["Đối chiếu công"]],
+    ["20", "current", ["Chốt bảng công", "Khóa kỳ lương"]],
+    ["21", "current", ["Tính lương nháp"]],
+    ["22", "current", ["Duyệt bank list"]],
+    ["23", "current", ["Gửi phiếu lương"]],
+    ["24", "current", []],
+    ["25", "current", []],
+    ["26", "current", ["Review phụ cấp"]],
+    ["27", "current", ["Báo cáo BH/PIT"]],
+    ["28", "current", ["Đào tạo an toàn"]],
+    ["29", "current", ["Audit log tháng"]],
+    ["30", "current", ["Khóa payroll"]],
+    ["31", "current", []],
+    ["01", "next", []],
+  ];
+
+  const todayEvents = [
+    ["08:30", "Kiểm tra 23 bản ghi thiếu Out sau ca CA3"],
+    ["10:00", "Duyệt đơn nghỉ phép bộ phận Production 3"],
+    ["14:00", "Review payroll tháng 05/2026 với Kế toán"],
+    ["16:30", "Gửi nhắc đánh giá 8 hợp đồng thử việc"],
+  ];
+
+  const calendarDeadlines = [
+    ["20/05", "Chốt bảng công tháng 05/2026"],
+    ["22/05", "Hoàn tất bank list Vietinbank"],
+    ["23/05", "Phát hành phiếu lương NLĐ"],
+    ["30/05", "Khóa kỳ lương và audit payroll"],
+  ];
+
   return (
     <main className="home-shell">
       <aside className="home-sidebar">
@@ -524,14 +587,22 @@ function DashboardScreen() {
               <em>›</em>
             </a>
           ))}
-          <div className="home-subnav">
+          <button
+            className={`home-subnav ${overviewTab === "dashboard" ? "" : "muted"}`}
+            type="button"
+            onClick={() => setOverviewTab("dashboard")}
+          >
             <span />
             <strong>Dashboard</strong>
-          </div>
-          <div className="home-subnav muted">
+          </button>
+          <button
+            className={`home-subnav ${overviewTab === "calendar" ? "" : "muted"}`}
+            type="button"
+            onClick={() => setOverviewTab("calendar")}
+          >
             <span />
             <strong>Lịch sự kiện</strong>
-          </div>
+          </button>
           {sidebarItems.slice(1).map(({ icon, label, active }) => (
             <a className={active ? "active" : ""} href="#dashboard" key={label}>
               <span>{icon}</span>
@@ -586,17 +657,30 @@ function DashboardScreen() {
         <div className="home-content" id="dashboard">
           <section className="home-hero-row">
             <div>
-              <h1>Chào buổi sáng, HR Admin 👋</h1>
-              <p>Thứ Sáu, 8 Tháng 5, 2026 · Bảng điều hành nhân sự LSEV</p>
+              <h1>{overviewTab === "dashboard" ? "Chào buổi sáng, HR Admin 👋" : "Lịch sự kiện nhân sự"}</h1>
+              <p>
+                {overviewTab === "dashboard"
+                  ? "Thứ Sáu, 8 Tháng 5, 2026 · Bảng điều hành nhân sự LSEV"
+                  : "Tháng 05/2026 · Theo dõi ca làm, nghỉ phép, hợp đồng, lương và đào tạo"}
+              </p>
             </div>
             <div className="home-alerts">
-              <span className="warning">✈ 24 đơn nghỉ chờ duyệt</span>
-              <span className="info">▤ 120 phiếu lương chờ kiểm tra</span>
+              {overviewTab === "dashboard" ? (
+                <>
+                  <span className="warning">✈ 24 đơn nghỉ chờ duyệt</span>
+                  <span className="info">▤ 120 phiếu lương chờ kiểm tra</span>
+                </>
+              ) : (
+                <>
+                  <span className="warning">◷ 7 sự kiện trong tuần</span>
+                  <span className="info">▤ 3 deadline payroll sắp tới</span>
+                </>
+              )}
             </div>
           </section>
 
           <section className="kpi-row">
-            {kpis.map(([icon, value, label, note, badge, tone]) => (
+            {(overviewTab === "dashboard" ? kpis : calendarStats).map(([icon, value, label, note, badge, tone]) => (
               <article className={`kpi-card ${tone}`} key={label}>
                 <div className="kpi-top">
                   <span className="kpi-icon">{icon}</span>
@@ -609,49 +693,111 @@ function DashboardScreen() {
             ))}
           </section>
 
-          <section className="dashboard-grid">
-            <article className="dashboard-panel chart-panel">
-              <div className="panel-heading">
-                <h2>Lối tắt nghiệp vụ hôm nay</h2>
-                <p>Những màn HR Admin dùng thường xuyên để vận hành nhân sự nhà máy.</p>
-              </div>
-              <div className="srs-module-list">
-                {quickActions.map(([title, desc, action], index) => (
-                  <article key={title}>
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <div>
-                      <h3>{title}</h3>
-                      <p>{desc}</p>
-                    </div>
-                    <small>{action}</small>
-                  </article>
-                ))}
-              </div>
-            </article>
-
-            <aside className="side-panels">
-              <article className="dashboard-panel scope-panel">
-                <h2>Việc cần xử lý</h2>
-                <div className="scope-list">
-                  {pendingTasks.map((item) => (
-                    <span key={item}>{item}</span>
+          {overviewTab === "dashboard" ? (
+            <section className="dashboard-grid">
+              <article className="dashboard-panel chart-panel">
+                <div className="panel-heading">
+                  <h2>Lối tắt nghiệp vụ hôm nay</h2>
+                  <p>Những màn HR Admin dùng thường xuyên để vận hành nhân sự nhà máy.</p>
+                </div>
+                <div className="srs-module-list">
+                  {quickActions.map(([title, desc, action], index) => (
+                    <article key={title}>
+                      <span>{String(index + 1).padStart(2, "0")}</span>
+                      <div>
+                        <h3>{title}</h3>
+                        <p>{desc}</p>
+                      </div>
+                      <small>{action}</small>
+                    </article>
                   ))}
                 </div>
               </article>
 
-              <article className="dashboard-panel role-panel">
-                <h2>Trạng thái vận hành</h2>
-                <div className="role-list">
-                  {healthItems.map(([name, note]) => (
-                    <span key={name}>
-                      <strong>{name}</strong>
-                      <small>{note}</small>
-                    </span>
+              <aside className="side-panels">
+                <article className="dashboard-panel scope-panel">
+                  <h2>Việc cần xử lý</h2>
+                  <div className="scope-list">
+                    {pendingTasks.map((item) => (
+                      <span key={item}>{item}</span>
+                    ))}
+                  </div>
+                </article>
+
+                <article className="dashboard-panel role-panel">
+                  <h2>Trạng thái vận hành</h2>
+                  <div className="role-list">
+                    {healthItems.map(([name, note]) => (
+                      <span key={name}>
+                        <strong>{name}</strong>
+                        <small>{note}</small>
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              </aside>
+            </section>
+          ) : (
+            <section className="calendar-layout">
+              <article className="dashboard-panel calendar-panel">
+                <div className="calendar-heading">
+                  <div>
+                    <h2>Tháng 05/2026</h2>
+                    <p>Lịch vận hành HR theo tuần, ca và deadline nghiệp vụ.</p>
+                  </div>
+                  <div className="calendar-controls">
+                    <button type="button">‹</button>
+                    <button type="button">Hôm nay</button>
+                    <button type="button">›</button>
+                  </div>
+                </div>
+
+                <div className="calendar-weekdays">
+                  {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map((day) => (
+                    <span key={day}>{day}</span>
+                  ))}
+                </div>
+                <div className="calendar-grid">
+                  {calendarDays.map(([day, state, events], index) => (
+                    <article className={`calendar-day ${state}`} key={`${day}-${index}`}>
+                      <strong>{day}</strong>
+                      <div>
+                        {(events as string[]).slice(0, 2).map((event) => (
+                          <span key={event}>{event}</span>
+                        ))}
+                      </div>
+                    </article>
                   ))}
                 </div>
               </article>
-            </aside>
-          </section>
+
+              <aside className="side-panels">
+                <article className="dashboard-panel today-panel">
+                  <h2>Hôm nay · 08/05</h2>
+                  <div className="timeline-list">
+                    {todayEvents.map(([time, event]) => (
+                      <span key={time}>
+                        <strong>{time}</strong>
+                        <small>{event}</small>
+                      </span>
+                    ))}
+                  </div>
+                </article>
+
+                <article className="dashboard-panel deadline-panel">
+                  <h2>Deadline sắp tới</h2>
+                  <div className="deadline-list">
+                    {calendarDeadlines.map(([date, event]) => (
+                      <span key={date}>
+                        <strong>{date}</strong>
+                        <small>{event}</small>
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              </aside>
+            </section>
+          )}
         </div>
       </section>
     </main>
