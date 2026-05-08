@@ -478,38 +478,37 @@ function DashboardScreen() {
   ];
 
   const kpis = [
-    ["▦", "07", "Module nghiệp vụ", "Danh mục → Ý kiến NLĐ", "SRS v2.1", "green"],
-    ["⌁", "Web + App", "Kênh sử dụng", "PC + iOS/Android self-service", "GMT+7", "blue"],
-    ["◷", "07 ca", "Ca làm việc LSEV", "Có ca vắt qua ngày +1", "30+ ký hiệu", "cyan"],
-    ["◎", "Ronald Jack", "Máy chấm công", "ACE 302/800 vân tay + khuôn mặt", "Real-time", "violet"],
-    ["$", "08 loại OT", "Engine tiền lương", "BH, PIT, phiếu lương, bank list", "Vietinbank", "amber"],
-    ["▣", "SSO/RBAC", "Bảo mật & phân quyền", "Role linh hoạt + audit toàn hệ thống", "PDPA", "red"],
+    ["👥", "1,000", "Tổng nhân sự", "31 bộ phận đang vận hành", "+18 tháng này", "green"],
+    ["◷", "94.8%", "Chấm công hôm nay", "67 lượt cần rà soát", "Real-time", "blue"],
+    ["✈", "24", "Đơn nghỉ chờ duyệt", "12 đơn quá 1 cấp duyệt", "Cần xử lý", "cyan"],
+    ["▤", "36", "Hợp đồng sắp hết hạn", "Trong 30 ngày tới", "Ưu tiên", "violet"],
+    ["$", "05/2026", "Kỳ lương đang mở", "120 phiếu chờ kiểm tra", "Payroll", "amber"],
+    ["♡", "18", "Ý kiến NLĐ mới", "Công, lương, hồ sơ cá nhân", "Phản hồi", "red"],
   ];
 
-  const overviewModules = [
-    ["M01", "Danh mục & Cấu hình", "Cây tổ chức, ca làm việc, ký hiệu nghỉ, chức danh, bậc lương, phụ cấp, định mức, RBAC.", "HR Admin"],
-    ["M02", "Hồ sơ Nhân viên", "Thông tin cá nhân, 5 loại quá trình, NPT, ngân hàng, đào tạo, thôi việc.", "HR Admin · TBP"],
-    ["M03", "Hợp đồng Lao động", "4 loại HĐ, quy trình tự động, template song ngữ VI-EN, cảnh báo hết hạn, in PDF/Word.", "HR Admin"],
-    ["M04", "Chấm công", "Tích hợp máy CC, 7 ca, 30+ ký hiệu, xếp ca, nghỉ 3 cấp, OT tự động, báo cáo.", "HR Admin · Tổ trưởng · NLĐ"],
-    ["M05", "Tiền lương", "Engine lương, 8 loại OT, BH, PIT 2 phương thức, phiếu lương, bank list Vietinbank.", "HR Admin"],
-    ["M06", "Phân quyền & Đăng nhập", "SSO, RBAC linh hoạt, quản lý tài khoản, audit log toàn hệ thống.", "HR Admin · System Admin"],
-    ["M07", "Ý kiến NLĐ", "NLĐ gửi thắc mắc, HR tiếp nhận và phản hồi, lịch sử theo nhân viên, thông báo.", "NLĐ · HR Admin"],
+  const quickActions = [
+    ["Hồ sơ nhân viên", "Cập nhật hồ sơ, quá trình lương, phụ cấp, người phụ thuộc và tài khoản ngân hàng.", "Mở hồ sơ"],
+    ["Duyệt nghỉ phép", "Xem đơn nghỉ theo luồng công nhân, nhân viên, trưởng bộ phận và HR cuối.", "Xử lý đơn"],
+    ["Rà soát chấm công", "Kiểm tra In/Out/CS/KP, ca vắt +1 và dữ liệu Ronald Jack trong ngày.", "Mở bảng công"],
+    ["Hợp đồng lao động", "Theo dõi thử việc, học việc, HĐLĐ sắp hết hạn và xuất PDF/Word.", "Xem cảnh báo"],
+    ["Tính lương", "Kiểm tra OT, lương đêm, KPI, bảo hiểm, PIT và bank list Vietinbank.", "Vào kỳ lương"],
+    ["Ý kiến người lao động", "Tiếp nhận thắc mắc về hồ sơ, công, lương và phản hồi theo từng nhân viên.", "Trả lời"],
   ];
 
-  const scopeItems = [
-    "Quản lý vòng đời nhân sự: gia nhập → hợp đồng → chấm công → tính lương → thôi việc",
-    "Hỗ trợ đặc thù nhà máy: ca kíp 3 ca, OT tự động, lương đêm, 30+ ký hiệu CC song ngữ",
-    "Tích hợp máy chấm công Ronald Jack ACE 302/800",
-    "Web PC và Mobile App cho NLĐ self-service",
-    "Báo cáo, phiếu lương, template HĐ song ngữ Việt-Anh theo mẫu LSEV",
+  const pendingTasks = [
+    "12 đơn nghỉ của công nhân cần HR duyệt bước cuối",
+    "23 bản ghi chấm công thiếu Out sau ca đêm CA3",
+    "8 hợp đồng thử việc cần đánh giá trước hạn 7 ngày",
+    "120 phiếu lương tháng 05/2026 đang chờ kiểm tra",
+    "18 phản hồi NLĐ chưa được gán người xử lý",
   ];
 
-  const roleItems = [
-    ["HR Admin", "Toàn quyền tất cả module"],
-    ["TBP / BOD", "Quản lý phạm vi bộ phận"],
-    ["Tổ trưởng", "Đăng ký ca, duyệt nghỉ cấp 1"],
-    ["NLĐ", "Self-service qua Web/App"],
-    ["System Admin", "SSO, backup, monitoring"],
+  const healthItems = [
+    ["Máy chấm công", "Ronald Jack đồng bộ 3 phút trước"],
+    ["SSO / RBAC", "AD-LDAP hoạt động bình thường"],
+    ["Lương & PIT", "Định mức 2026 đã áp dụng"],
+    ["Mobile App", "Self-service online 24/7"],
+    ["Audit log", "Không có cảnh báo bất thường"],
   ];
 
   return (
@@ -587,12 +586,12 @@ function DashboardScreen() {
         <div className="home-content" id="dashboard">
           <section className="home-hero-row">
             <div>
-              <h1>Tổng quan hệ thống NextX HRM</h1>
-              <p>SRS v2.1 · LSEV · Cập nhật phản hồi HR TEAM 17/04/2026</p>
+              <h1>Chào buổi sáng, HR Admin 👋</h1>
+              <p>Thứ Sáu, 8 Tháng 5, 2026 · Bảng điều hành nhân sự LSEV</p>
             </div>
             <div className="home-alerts">
-              <span className="warning">⚑ Bản chính thức · Chờ ký xác nhận LSEV</span>
-              <span className="info">▤ 7 module trong phạm vi triển khai</span>
+              <span className="warning">✈ 24 đơn nghỉ chờ duyệt</span>
+              <span className="info">▤ 120 phiếu lương chờ kiểm tra</span>
             </div>
           </section>
 
@@ -613,18 +612,18 @@ function DashboardScreen() {
           <section className="dashboard-grid">
             <article className="dashboard-panel chart-panel">
               <div className="panel-heading">
-                <h2>Danh mục 7 module theo tài liệu SRS</h2>
-                <p>Phạm vi chức năng chính và nhóm người dùng tương ứng.</p>
+                <h2>Lối tắt nghiệp vụ hôm nay</h2>
+                <p>Những màn HR Admin dùng thường xuyên để vận hành nhân sự nhà máy.</p>
               </div>
               <div className="srs-module-list">
-                {overviewModules.map(([code, title, desc, owner]) => (
-                  <article key={code}>
-                    <span>{code}</span>
+                {quickActions.map(([title, desc, action], index) => (
+                  <article key={title}>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
                     <div>
                       <h3>{title}</h3>
                       <p>{desc}</p>
                     </div>
-                    <small>{owner}</small>
+                    <small>{action}</small>
                   </article>
                 ))}
               </div>
@@ -632,20 +631,20 @@ function DashboardScreen() {
 
             <aside className="side-panels">
               <article className="dashboard-panel scope-panel">
-                <h2>In Scope</h2>
+                <h2>Việc cần xử lý</h2>
                 <div className="scope-list">
-                  {scopeItems.map((item) => (
+                  {pendingTasks.map((item) => (
                     <span key={item}>{item}</span>
                   ))}
                 </div>
               </article>
 
               <article className="dashboard-panel role-panel">
-                <h2>Đối tượng sử dụng</h2>
+                <h2>Trạng thái vận hành</h2>
                 <div className="role-list">
-                  {roleItems.map(([role, note]) => (
-                    <span key={role}>
-                      <strong>{role}</strong>
+                  {healthItems.map(([name, note]) => (
+                    <span key={name}>
+                      <strong>{name}</strong>
                       <small>{note}</small>
                     </span>
                   ))}
