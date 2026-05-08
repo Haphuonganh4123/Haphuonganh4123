@@ -480,12 +480,12 @@ function DashboardScreen() {
   ];
 
   const kpis = [
-    ["👥", "300", "Tổng Nhân Viên", "5 phòng ban", "+12 tháng này", "green"],
-    ["▣", "292", "Đang Làm Việc", "97% tổng nhân sự", "97.3%", "blue"],
-    ["▤", "5", "Phòng Ban", "4 chi nhánh", "", "cyan"],
-    ["◷", "92.5%", "Tỷ Lệ Chấm Công", "8.3% đi muộn", "+2.1%", "violet"],
-    ["$", "28 triệu", "Lương TB / Người", "VNĐ / tháng", "", "amber"],
-    ["☹", "1.3%", "Tỷ Lệ Nghỉ Việc", "4 người đã nghỉ", "1.3%", "red"],
+    ["NV", "300", "Tổng Nhân Viên", "5 phòng ban", "+12 tháng này", "green"],
+    ["LV", "292", "Đang Làm Việc", "97% tổng nhân sự", "97.3%", "blue"],
+    ["PB", "5", "Phòng Ban", "4 chi nhánh", "", "cyan"],
+    ["CC", "92.5%", "Tỷ Lệ Chấm Công", "8.3% đi muộn", "+2.1%", "violet"],
+    ["L", "28 triệu", "Lương TB / Người", "VNĐ / tháng", "", "amber"],
+    ["NV", "1.3%", "Tỷ Lệ Nghỉ Việc", "4 người đã nghỉ", "1.3%", "red"],
   ];
 
   const quickActions = [
@@ -515,28 +515,28 @@ function DashboardScreen() {
 
   const departmentBars = [
     { code: "IT", name: "Công Nghệ Thông Tin", value: 66, color: "#15803d" },
-    { code: "HR", name: "Nhân Sự", value: 55, color: "#5146e5" },
-    { code: "FIN", name: "Tài Chính", value: 48, color: "#1396ad" },
-    { code: "MKT", name: "Marketing", value: 73, color: "#c2185b" },
-    { code: "SALES", name: "Kinh Doanh", value: 58, color: "#7c3aed" },
+    { code: "HR", name: "Nhân Sự", value: 55, color: "#4b5563" },
+    { code: "FIN", name: "Tài Chính", value: 48, color: "#64748b" },
+    { code: "MKT", name: "Marketing", value: 73, color: "#0f766e" },
+    { code: "SALES", name: "Kinh Doanh", value: 58, color: "#334155" },
   ];
 
   const branchRows = [
     ["TP.HCM", "76", "25%", "#15803d"],
-    ["Hà Nội", "80", "27%", "#5146e5"],
-    ["Đà Nẵng", "75", "25%", "#1396ad"],
-    ["Cần Thơ", "69", "23%", "#b45309"],
+    ["Hà Nội", "80", "27%", "#4b5563"],
+    ["Đà Nẵng", "75", "25%", "#64748b"],
+    ["Cần Thơ", "69", "23%", "#0f766e"],
   ];
 
   const levels = [
     ["Intern", "35", "#94a3b8"],
     ["Fresher", "53", "#64748b"],
-    ["Junior", "27", "#7c3aed"],
-    ["Middle", "34", "#0891b2"],
+    ["Junior", "27", "#475569"],
+    ["Middle", "34", "#0f766e"],
     ["Senior", "41", "#15803d"],
-    ["Lead", "38", "#b45309"],
-    ["Manager", "36", "#8b5cf6"],
-    ["Director", "36", "#ef4444"],
+    ["Lead", "38", "#334155"],
+    ["Manager", "36", "#64748b"],
+    ["Director", "36", "#475569"],
   ];
 
   const notifications = [
@@ -549,17 +549,17 @@ function DashboardScreen() {
   const performanceRows = [
     ["Xuất sắc", "66", "22%", "#15803d"],
     ["Tốt", "123", "41%", "#10b981"],
-    ["Trung bình", "84", "28%", "#f59e0b"],
-    ["Dưới TB", "21", "7%", "#ef4444"],
-    ["Kém", "6", "2%", "#dc2626"],
+    ["Trung bình", "84", "28%", "#64748b"],
+    ["Dưới TB", "21", "7%", "#94a3b8"],
+    ["Kém", "6", "2%", "#cbd5e1"],
   ];
 
   const orgLeaders = [
-    ["TV", "Trần Văn Hùng", "Trưởng Phòng CNTT", "72 người", "#5146e5"],
-    ["VT", "Vũ Thị Mai", "Trưởng Phòng Nhân Sự", "18 người", "#1396ad"],
-    ["ĐH", "Đỗ Hồng Quân", "Trưởng Phòng Tài Chính", "25 người", "#b45309"],
-    ["HT", "Hồ Thị Vy", "Trưởng Phòng Marketing", "30 người", "#c2185b"],
-    ["NT", "Nguyễn Thanh Cường", "Trưởng Phòng Kinh Doanh", "65 người", "#7c3aed"],
+    ["TV", "Trần Văn Hùng", "Trưởng Phòng CNTT", "72 người", "#475569"],
+    ["VT", "Vũ Thị Mai", "Trưởng Phòng Nhân Sự", "18 người", "#0f766e"],
+    ["ĐH", "Đỗ Hồng Quân", "Trưởng Phòng Tài Chính", "25 người", "#64748b"],
+    ["HT", "Hồ Thị Vy", "Trưởng Phòng Marketing", "30 người", "#334155"],
+    ["NT", "Nguyễn Thanh Cường", "Trưởng Phòng Kinh Doanh", "65 người", "#15803d"],
   ];
 
   const calendarStats = [
