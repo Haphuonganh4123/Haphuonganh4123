@@ -478,21 +478,19 @@ function AuthScreen({ onEnter }: { onEnter: () => void }) {
           </div>
 
           <div className="auth-copy">
-            <p>LSEV Workforce Platform</p>
-            <h1>
-              Quản lý nhân sự nhà máy trên một hệ thống thống nhất
-            </h1>
+            <p>LSEV Workforce Console</p>
+            <h1>Quản lý nhân sự nhà máy trong một giao diện thống nhất</h1>
             <span>
-              Hồ sơ, hợp đồng, ca kíp, chấm công, tiền lương, phân quyền và phản hồi người
-              lao động được vận hành trong cùng một console.
+              Theo dõi hồ sơ, hợp đồng, ca kíp, chấm công, tiền lương và phản hồi người
+              lao động trong cùng một hệ thống.
             </span>
           </div>
 
           <div className="auth-preview">
             <div className="preview-header">
               <div>
-                <strong>Vận hành hôm nay</strong>
-                <small>Thứ Năm, 07/05/2026</small>
+                <strong>Ca vận hành hôm nay</strong>
+                <small>LSEV - HR Admin workspace</small>
               </div>
               <span>Live</span>
             </div>
@@ -503,7 +501,7 @@ function AuthScreen({ onEnter }: { onEnter: () => void }) {
                 <span>14:00 - 22:00</span>
               </article>
               <article>
-                <small>Đơn nghỉ chờ duyệt</small>
+                <small>Nghỉ chờ duyệt</small>
                 <strong>11</strong>
                 <span>3 cấp phê duyệt</span>
               </article>
@@ -532,9 +530,9 @@ function AuthScreen({ onEnter }: { onEnter: () => void }) {
       <section className="auth-form-panel">
         <form className="auth-card" onSubmit={handleSubmit}>
           <div className="auth-title">
-            <span>Chào mừng trở lại</span>
-            <h2>Đăng nhập</h2>
-            <p>Truy cập console quản trị nhân sự NextX HRM.</p>
+            <span>Đăng nhập hệ thống</span>
+            <h2>Chào mừng trở lại</h2>
+            <p>Truy cập bảng điều khiển nhân sự NextX HRM.</p>
           </div>
 
           <button className="auth-social" type="button" onClick={onEnter}>
