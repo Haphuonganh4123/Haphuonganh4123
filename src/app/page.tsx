@@ -478,20 +478,38 @@ function DashboardScreen() {
   ];
 
   const kpis = [
-    ["👥", "300", "Tổng Nhân Viên", "5 phòng ban", "+12 tháng này", "green"],
-    ["▣", "292", "Đang Làm Việc", "97% tổng nhân sự", "97.3%", "blue"],
-    ["▤", "5", "Phòng Ban", "4 chi nhánh", "", "cyan"],
-    ["◷", "92.5%", "Tỷ Lệ Chấm Công", "8.3% đi muộn", "+2.1%", "violet"],
-    ["$", "28 triệu", "Lương TB / Người", "VNĐ / tháng", "", "amber"],
-    ["☹", "1.3%", "Tỷ Lệ Nghỉ Việc", "4 người đã nghỉ", "1.3%", "red"],
+    ["▦", "07", "Module nghiệp vụ", "Danh mục → Ý kiến NLĐ", "SRS v2.1", "green"],
+    ["⌁", "Web + App", "Kênh sử dụng", "PC + iOS/Android self-service", "GMT+7", "blue"],
+    ["◷", "07 ca", "Ca làm việc LSEV", "Có ca vắt qua ngày +1", "30+ ký hiệu", "cyan"],
+    ["◎", "Ronald Jack", "Máy chấm công", "ACE 302/800 vân tay + khuôn mặt", "Real-time", "violet"],
+    ["$", "08 loại OT", "Engine tiền lương", "BH, PIT, phiếu lương, bank list", "Vietinbank", "amber"],
+    ["▣", "SSO/RBAC", "Bảo mật & phân quyền", "Role linh hoạt + audit toàn hệ thống", "PDPA", "red"],
   ];
 
-  const bars = [
-    ["IT", 66, "#15803d", "Công Nghệ Thông Tin"],
-    ["HR", 55, "#5146e5", "Nhân Sự"],
-    ["FIN", 48, "#1396ad", "Tài Chính"],
-    ["MKT", 73, "#c2185b", "Marketing"],
-    ["SALES", 58, "#7c3aed", "Kinh Doanh"],
+  const overviewModules = [
+    ["M01", "Danh mục & Cấu hình", "Cây tổ chức, ca làm việc, ký hiệu nghỉ, chức danh, bậc lương, phụ cấp, định mức, RBAC.", "HR Admin"],
+    ["M02", "Hồ sơ Nhân viên", "Thông tin cá nhân, 5 loại quá trình, NPT, ngân hàng, đào tạo, thôi việc.", "HR Admin · TBP"],
+    ["M03", "Hợp đồng Lao động", "4 loại HĐ, quy trình tự động, template song ngữ VI-EN, cảnh báo hết hạn, in PDF/Word.", "HR Admin"],
+    ["M04", "Chấm công", "Tích hợp máy CC, 7 ca, 30+ ký hiệu, xếp ca, nghỉ 3 cấp, OT tự động, báo cáo.", "HR Admin · Tổ trưởng · NLĐ"],
+    ["M05", "Tiền lương", "Engine lương, 8 loại OT, BH, PIT 2 phương thức, phiếu lương, bank list Vietinbank.", "HR Admin"],
+    ["M06", "Phân quyền & Đăng nhập", "SSO, RBAC linh hoạt, quản lý tài khoản, audit log toàn hệ thống.", "HR Admin · System Admin"],
+    ["M07", "Ý kiến NLĐ", "NLĐ gửi thắc mắc, HR tiếp nhận và phản hồi, lịch sử theo nhân viên, thông báo.", "NLĐ · HR Admin"],
+  ];
+
+  const scopeItems = [
+    "Quản lý vòng đời nhân sự: gia nhập → hợp đồng → chấm công → tính lương → thôi việc",
+    "Hỗ trợ đặc thù nhà máy: ca kíp 3 ca, OT tự động, lương đêm, 30+ ký hiệu CC song ngữ",
+    "Tích hợp máy chấm công Ronald Jack ACE 302/800",
+    "Web PC và Mobile App cho NLĐ self-service",
+    "Báo cáo, phiếu lương, template HĐ song ngữ Việt-Anh theo mẫu LSEV",
+  ];
+
+  const roleItems = [
+    ["HR Admin", "Toàn quyền tất cả module"],
+    ["TBP / BOD", "Quản lý phạm vi bộ phận"],
+    ["Tổ trưởng", "Đăng ký ca, duyệt nghỉ cấp 1"],
+    ["NLĐ", "Self-service qua Web/App"],
+    ["System Admin", "SSO, backup, monitoring"],
   ];
 
   return (
@@ -569,12 +587,12 @@ function DashboardScreen() {
         <div className="home-content" id="dashboard">
           <section className="home-hero-row">
             <div>
-              <h1>Chào buổi sáng, HR Admin 👋</h1>
-              <p>Thứ Sáu, 8 Tháng 5, 2026</p>
+              <h1>Tổng quan hệ thống NextX HRM</h1>
+              <p>SRS v2.1 · LSEV · Cập nhật phản hồi HR TEAM 17/04/2026</p>
             </div>
             <div className="home-alerts">
-              <span className="warning">♧ 12 đơn nghỉ chờ duyệt</span>
-              <span className="info">▤ 120 bảng lương chờ xử lý</span>
+              <span className="warning">⚑ Bản chính thức · Chờ ký xác nhận LSEV</span>
+              <span className="info">▤ 7 module trong phạm vi triển khai</span>
             </div>
           </section>
 
@@ -595,61 +613,43 @@ function DashboardScreen() {
           <section className="dashboard-grid">
             <article className="dashboard-panel chart-panel">
               <div className="panel-heading">
-                <h2>Phân Bổ Nhân Sự Theo Phòng Ban</h2>
-                <p>Số lượng nhân viên tại từng phòng ban</p>
+                <h2>Danh mục 7 module theo tài liệu SRS</h2>
+                <p>Phạm vi chức năng chính và nhóm người dùng tương ứng.</p>
               </div>
-              <div className="bar-chart" aria-label="Biểu đồ phân bổ nhân sự">
-                <div className="chart-scale">
-                  <span>80</span>
-                  <span>60</span>
-                  <span>40</span>
-                  <span>20</span>
-                  <span>0</span>
-                </div>
-                <div className="chart-bars">
-                  {bars.map(([label, value, color]) => (
-                    <div className="chart-bar-item" key={label}>
-                      <span style={{ height: `${Number(value) * 2.8}px`, background: String(color) }} />
-                      <small>{label}</small>
+              <div className="srs-module-list">
+                {overviewModules.map(([code, title, desc, owner]) => (
+                  <article key={code}>
+                    <span>{code}</span>
+                    <div>
+                      <h3>{title}</h3>
+                      <p>{desc}</p>
                     </div>
-                  ))}
-                </div>
-              </div>
-              <div className="chart-legend">
-                {bars.map(([label, value, color, name]) => (
-                  <span key={label}>
-                    <i style={{ background: String(color) }} />
-                    {name} <strong>({value})</strong>
-                  </span>
+                    <small>{owner}</small>
+                  </article>
                 ))}
               </div>
             </article>
 
             <aside className="side-panels">
-              <article className="dashboard-panel employee-status">
-                <h2>Trạng Thái Nhân Viên</h2>
-                <div className="status-body">
-                  <div className="donut-chart" />
-                  <div className="status-list">
-                    <span><i className="green-dot" />Đang làm <strong>292</strong></span>
-                    <span><i className="orange-dot" />Đang nghỉ phép <strong>4</strong></span>
-                    <span><i className="red-dot" />Đã nghỉ việc <strong>4</strong></span>
-                  </div>
+              <article className="dashboard-panel scope-panel">
+                <h2>In Scope</h2>
+                <div className="scope-list">
+                  {scopeItems.map((item) => (
+                    <span key={item}>{item}</span>
+                  ))}
                 </div>
               </article>
 
-              <article className="dashboard-panel contract-panel">
-                <h2>Loại Hợp Đồng</h2>
-                <div className="contract-row">
-                  <span>Toàn thời gian</span>
-                  <strong>271 (90%)</strong>
+              <article className="dashboard-panel role-panel">
+                <h2>Đối tượng sử dụng</h2>
+                <div className="role-list">
+                  {roleItems.map(([role, note]) => (
+                    <span key={role}>
+                      <strong>{role}</strong>
+                      <small>{note}</small>
+                    </span>
+                  ))}
                 </div>
-                <div className="progress"><span style={{ width: "90%" }} /></div>
-                <div className="contract-row">
-                  <span>Hợp đồng</span>
-                  <strong>13 (4%)</strong>
-                </div>
-                <div className="progress purple"><span style={{ width: "4%" }} /></div>
               </article>
             </aside>
           </section>
