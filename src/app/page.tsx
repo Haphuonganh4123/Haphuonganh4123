@@ -463,9 +463,17 @@ export default function Home() {
 }
 
 function AuthScreen({ onEnter }: { onEnter: () => void }) {
+  const [loginProvider, setLoginProvider] = useState<"google" | "facebook" | "password" | null>(null);
+  const isLoggingIn = loginProvider !== null;
+
+  function completeLogin(provider: "google" | "facebook" | "password") {
+    setLoginProvider(provider);
+    window.setTimeout(onEnter, 650);
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    onEnter();
+    completeLogin("password");
   }
 
   return (
@@ -533,13 +541,23 @@ function AuthScreen({ onEnter }: { onEnter: () => void }) {
             <p>Bạn có thể nhập bất kỳ email và mật khẩu nào để tiếp tục</p>
           </div>
 
-          <button className="auth-social" type="button" onClick={onEnter}>
+          <button
+            className="auth-social"
+            type="button"
+            disabled={isLoggingIn}
+            onClick={() => completeLogin("google")}
+          >
             <GoogleIcon />
-            Đăng nhập với Google
+            {loginProvider === "google" ? "Đang đăng nhập với Google..." : "Đăng nhập với Google"}
           </button>
-          <button className="auth-social" type="button" onClick={onEnter}>
+          <button
+            className="auth-social"
+            type="button"
+            disabled={isLoggingIn}
+            onClick={() => completeLogin("facebook")}
+          >
             <FacebookIcon />
-            Đăng nhập với Facebook
+            {loginProvider === "facebook" ? "Đang đăng nhập với Facebook..." : "Đăng nhập với Facebook"}
           </button>
 
           <div className="auth-divider">
@@ -566,8 +584,8 @@ function AuthScreen({ onEnter }: { onEnter: () => void }) {
             </label>
           </div>
 
-          <button className="auth-submit" type="submit">
-            Tiếp tục
+          <button className="auth-submit" type="submit" disabled={isLoggingIn}>
+            {loginProvider === "password" ? "Đang vào trang chủ..." : "Tiếp tục"}
           </button>
 
           <p className="auth-legal">

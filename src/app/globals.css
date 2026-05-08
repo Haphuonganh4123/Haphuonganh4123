@@ -346,6 +346,12 @@ a {
   background: #fbfcfe;
 }
 
+.auth-social:disabled,
+.auth-submit:disabled {
+  cursor: wait;
+  opacity: 0.82;
+}
+
 .social-icon {
   width: 24px;
   height: 24px;
