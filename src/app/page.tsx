@@ -530,18 +530,18 @@ function AuthScreen({ onEnter }: { onEnter: () => void }) {
       <section className="auth-form-panel">
         <form className="auth-card" onSubmit={handleSubmit}>
           <div className="auth-title">
-            <span>Đăng nhập hệ thống</span>
-            <h2>Chào mừng trở lại</h2>
-            <p>Truy cập bảng điều khiển nhân sự NextX HRM.</p>
+            <h2>Đăng nhập</h2>
+            <p>Đăng nhập vào tài khoản để quản lý doanh nghiệp của bạn.</p>
+            <p>Bạn có thể nhập bất kỳ email và mật khẩu nào để tiếp tục</p>
           </div>
 
           <button className="auth-social" type="button" onClick={onEnter}>
-            <span>G</span>
+            <span className="social-icon google-icon">G</span>
             Đăng nhập với Google
           </button>
           <button className="auth-social" type="button" onClick={onEnter}>
-            <span>SSO</span>
-            Đăng nhập qua SSO LSEV
+            <span className="social-icon facebook-icon">f</span>
+            Đăng nhập với Facebook
           </button>
 
           <div className="auth-divider">
@@ -550,14 +550,14 @@ function AuthScreen({ onEnter }: { onEnter: () => void }) {
 
           <label className="auth-field">
             Email
-            <input type="email" placeholder="hr.admin@lsev.vn" />
+            <input type="email" placeholder="user@mail.com" />
           </label>
 
           <label className="auth-field">
             Mật khẩu
             <div className="password-field">
               <input type="password" placeholder="••••••••" />
-              <span>Ẩn</span>
+              <span aria-hidden="true">◎</span>
             </div>
           </label>
 
@@ -566,7 +566,6 @@ function AuthScreen({ onEnter }: { onEnter: () => void }) {
               <input type="checkbox" />
               Nhớ tôi
             </label>
-            <a href="#forgot">Quên mật khẩu?</a>
           </div>
 
           <button className="auth-submit" type="submit">
@@ -574,7 +573,12 @@ function AuthScreen({ onEnter }: { onEnter: () => void }) {
           </button>
 
           <p className="auth-legal">
-            Demo UI: nhập email và mật khẩu bất kỳ để vào hệ thống.
+            Bằng việc tiếp tục bạn đồng ý với <a href="#terms">Terms of Service</a> và xác nhận bạn đã đọc{" "}
+            <a href="#privacy">Privacy Policy</a>
+          </p>
+
+          <p className="auth-register">
+            Bạn chưa có tài khoản? <a href="#register">Đăng ký ngay</a>
           </p>
         </form>
       </section>

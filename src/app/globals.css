@@ -286,23 +286,22 @@ a {
   display: grid;
   place-items: center;
   overflow: hidden;
-  padding: 30px;
-  background:
-    radial-gradient(circle at 50% 18%, rgba(22, 163, 74, 0.08), transparent 32%),
-    #f8fafc;
+  padding: 32px;
+  background: #ffffff;
 }
 
 .auth-card {
-  width: min(468px, 100%);
-  padding: 24px 30px;
-  border: 1px solid #e4e7ec;
-  border-radius: 16px;
+  width: min(480px, 100%);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
   background: #ffffff;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  box-shadow: none;
 }
 
 .auth-title {
-  margin-bottom: 18px;
+  margin-bottom: 40px;
+  text-align: center;
 }
 
 .auth-title span {
@@ -315,53 +314,75 @@ a {
 }
 
 .auth-title h2 {
-  margin: 0 0 8px;
-  color: #081225;
-  font-size: 29px;
+  margin: 0 0 14px;
+  color: #061124;
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 900;
 }
 
 .auth-title p {
-  margin: 0;
+  margin: 4px 0 0;
   color: #667085;
+  font-size: 15px;
   line-height: 1.5;
 }
 
 .auth-social,
 .auth-submit {
   width: 100%;
-  min-height: 44px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  margin-bottom: 10px;
+  gap: 13px;
+  margin-bottom: 16px;
   border-radius: 999px;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .auth-social {
-  border-color: #dfe4ec;
+  border: 1px solid #e0e5ed;
   background: #ffffff;
-  color: #1d2939;
+  color: #172033;
+  font-weight: 800;
 }
 
 .auth-social:hover {
-  border-color: #b7c0ce;
-  background: #f8fafc;
+  border-color: #cbd5e1;
+  background: #fbfcfe;
 }
 
-.auth-social span {
-  min-width: 32px;
-  color: #1a73e8;
+.social-icon {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
   font-weight: 900;
+  line-height: 1;
+}
+
+.google-icon {
+  color: #4285f4;
+  font-size: 23px;
+}
+
+.facebook-icon {
+  border-radius: 50%;
+  background: #1877f2;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 23px;
 }
 
 .auth-divider {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin: 16px 0 14px;
+  margin: 34px 0 28px;
   color: #98a2b3;
+  font-size: 14px;
 }
 
 .auth-divider::before,
@@ -374,25 +395,26 @@ a {
 
 .auth-field {
   display: grid;
-  gap: 10px;
-  margin-bottom: 12px;
-  color: #1d2939;
+  gap: 11px;
+  margin-bottom: 22px;
+  color: #172033;
   font-weight: 800;
 }
 
 .auth-field input,
 .password-field {
   width: 100%;
-  min-height: 46px;
+  min-height: 56px;
   border: 1px solid #dfe4ec;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #fbfcfe;
 }
 
 .auth-field input {
-  padding: 0 20px;
+  padding: 0 21px;
   outline: 0;
-  color: #1d2939;
+  color: #172033;
+  font-size: 15px;
 }
 
 .password-field {
@@ -401,7 +423,7 @@ a {
 }
 
 .password-field input {
-  min-height: 44px;
+  min-height: 54px;
   border: 0;
   background: transparent;
 }
@@ -409,7 +431,7 @@ a {
 .password-field span {
   padding: 0 16px;
   color: #98a2b3;
-  font-size: 13px;
+  font-size: 22px;
   font-weight: 800;
 }
 
@@ -424,20 +446,22 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin: 0 0 14px;
+  margin: -2px 0 24px;
 }
 
 .auth-options label {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #1d2939;
+  color: #172033;
   font-weight: 800;
 }
 
 .auth-options input {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: #16a34a;
 }
 
 .auth-options a,
@@ -452,7 +476,9 @@ a {
   border: 0;
   background: #16a34a;
   color: #ffffff;
-  box-shadow: 0 16px 30px rgba(22, 163, 74, 0.24);
+  font-size: 17px;
+  font-weight: 900;
+  box-shadow: 0 15px 24px rgba(22, 163, 74, 0.28);
 }
 
 .auth-submit:hover {
@@ -467,8 +493,13 @@ a {
 }
 
 .auth-legal {
-  margin: 12px 0 0;
+  margin: 20px 0 0;
   font-size: 13px;
+}
+
+.auth-register {
+  margin: 16px 0 0;
+  font-size: 14px;
 }
 
 .app-shell {
