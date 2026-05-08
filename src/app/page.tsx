@@ -474,55 +474,53 @@ function AuthScreen({ onEnter }: { onEnter: () => void }) {
         <div className="auth-brand-inner">
           <div className="auth-logo">
             <span>NX</span>
-            <strong>nextX HRM</strong>
+            <strong>next X</strong>
           </div>
 
           <div className="auth-copy">
-            <p>LSEV Workforce Console</p>
-            <h1>Quản lý nhân sự nhà máy trong một giao diện thống nhất</h1>
+            <h1>
+              Nền tảng quản lý kinh doanh đa lĩnh vực <span>All-in-One</span>
+            </h1>
             <span>
-              Theo dõi hồ sơ, hợp đồng, ca kíp, chấm công, tiền lương và phản hồi người
-              lao động trong cùng một hệ thống.
+              Tích hợp 8 phân hệ trong một hệ thống: CRM, Bán hàng, DMS, Call Center, HR, Loyalty &
+              Marketing. Tối ưu vận hành, tăng trưởng doanh thu và nâng cao trải nghiệm khách hàng.
             </span>
           </div>
 
-          <div className="auth-preview">
-            <div className="preview-header">
+          <div className="auth-stats-grid">
+            <article className="auth-stat-card">
+              <span aria-hidden="true">👥</span>
               <div>
-                <strong>Ca vận hành hôm nay</strong>
-                <small>LSEV - HR Admin workspace</small>
+                <strong>10,000+</strong>
+                <small>Doanh nghiệp</small>
               </div>
-              <span>Live</span>
-            </div>
-            <div className="preview-grid">
-              <article>
-                <small>Ca đang chạy</small>
-                <strong>CA2</strong>
-                <span>14:00 - 22:00</span>
-              </article>
-              <article>
-                <small>Nghỉ chờ duyệt</small>
-                <strong>11</strong>
-                <span>3 cấp phê duyệt</span>
-              </article>
-              <article>
-                <small>OT tự động</small>
-                <strong>8 loại</strong>
-                <span>Làm tròn 15 phút</span>
-              </article>
-              <article>
-                <small>Kỳ lương</small>
-                <strong>05/2026</strong>
-                <span>Chờ chốt</span>
-              </article>
-            </div>
+            </article>
+            <article className="auth-stat-card">
+              <span aria-hidden="true">⚡</span>
+              <div>
+                <strong>99.9%</strong>
+                <small>Uptime SLA</small>
+              </div>
+            </article>
+            <article className="auth-stat-card">
+              <span aria-hidden="true">🔄</span>
+              <div>
+                <strong>Real-time</strong>
+                <small>Đồng bộ dữ liệu</small>
+              </div>
+            </article>
+            <article className="auth-stat-card">
+              <span aria-hidden="true">🛡️</span>
+              <div>
+                <strong>ISO 27001</strong>
+                <small>Bảo mật</small>
+              </div>
+            </article>
           </div>
 
-          <div className="auth-trust-row">
-            <span>SSO / AD-LDAP</span>
-            <span>RBAC</span>
-            <span>Audit log</span>
-            <span>PDPA</span>
+          <div className="auth-online-status">
+            <span />
+            NextX Team • Online 24/7
           </div>
         </div>
       </section>
