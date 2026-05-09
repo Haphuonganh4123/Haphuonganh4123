@@ -709,7 +709,6 @@ function DashboardScreen() {
           <div className="home-actions">
             <button type="button" className="company-pill">
               <span>TGV</span>
-              Thế Giới Việt
             </button>
             <button type="button">☾</button>
             <button type="button">☷</button>
