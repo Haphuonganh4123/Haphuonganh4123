@@ -1168,10 +1168,10 @@ function ChevronIcon({ open }: { open: boolean }) {
 
 function EmployeeProfileSection() {
   const employeeStats = [
-    ["300", "Tổng nhân sự", "5 phòng ban", "people"],
-    ["282", "Đang làm việc", "94% tổng nhân sự", "active"],
-    ["0", "Mới 30 ngày", "Chưa phát sinh mới", "new"],
-    ["7", "Đã nghỉ việc", "Cần lưu hồ sơ", "off"],
+    ["300", "Tổng nhân sự", "5 phòng ban", "NV"],
+    ["282", "Đang làm việc", "94% tổng nhân sự", "LV"],
+    ["0", "Mới 30 ngày", "Chưa phát sinh mới", "M"],
+    ["7", "Đã nghỉ việc", "Cần lưu hồ sơ", "N"],
   ];
 
   const employees = [
@@ -1202,9 +1202,13 @@ function EmployeeProfileSection() {
       </section>
 
       <section className="employee-top-tabs" aria-label="Loại hồ sơ">
-        {["Danh sách nhân viên", "Danh sách nghỉ hưu", "Người nước ngoài"].map((item, index) => (
+        {[
+          ["Danh sách nhân viên", "DS"],
+          ["Danh sách nghỉ hưu", "NH"],
+          ["Người nước ngoài", "NN"],
+        ].map(([item, icon], index) => (
           <button type="button" className={index === 0 ? "active" : ""} key={item}>
-            <span>{index === 0 ? "👥" : index === 1 ? "♿" : "◎"}</span>
+            <span>{icon}</span>
             {item}
           </button>
         ))}
@@ -1226,9 +1230,7 @@ function EmployeeProfileSection() {
       <section className="employee-stat-row">
         {employeeStats.map(([value, label, note, tone]) => (
           <article className="employee-stat-card employee-directory-stat" key={label}>
-            <span className={`employee-stat-icon ${tone}`}>
-              {tone === "people" ? "👥" : tone === "active" ? "✓" : tone === "new" ? "↗" : "−"}
-            </span>
+            <span className="employee-stat-icon">{tone}</span>
             <div>
               <strong>{value}</strong>
               <span>{label}</span>
@@ -1245,13 +1247,13 @@ function EmployeeProfileSection() {
               <span>⌕</span>
               <input placeholder="Tìm theo tên, mã NV, email, phòng ban, chức vụ, số điện thoại..." />
             </label>
-            <button type="button" className="employee-filter-button">☷ Lọc</button>
+            <button type="button" className="employee-filter-button">Bộ lọc</button>
             <div className="employee-view-toggle">
-              <button type="button" className="active">☰</button>
-              <button type="button">▦</button>
+              <button type="button" className="active">List</button>
+              <button type="button">Grid</button>
             </div>
-            <button type="button" className="employee-action-button">↥ Import</button>
-            <button type="button" className="employee-action-button">⇩ Xuất</button>
+            <button type="button" className="employee-action-button">Import</button>
+            <button type="button" className="employee-action-button">Xuất</button>
             <button type="button" className="primary-action">+ Thêm nhân viên</button>
           </div>
 
@@ -1260,7 +1262,7 @@ function EmployeeProfileSection() {
               <div className="employee-table-caption">PHÒNG BAN</div>
               {departments.map(([label, count, kind], index) => (
                 <button type="button" className={index === 0 ? "active" : ""} key={label}>
-                  <span>{kind === "all" ? "👥" : "▤"}</span>
+                  <span>{kind === "all" ? "ALL" : "PB"}</span>
                   <strong>{label}</strong>
                   <em>{count}</em>
                 </button>
