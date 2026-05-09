@@ -627,7 +627,10 @@ function DashboardScreen() {
   return (
     <main className="home-shell">
       <aside className="home-sidebar">
-        <div className="home-logo">nextX</div>
+        <div className="home-logo">
+          <span>next</span>
+          <strong>X</strong>
+        </div>
 
         <nav className="home-nav" aria-label="Dashboard navigation">
           {sidebarItems.slice(0, 1).map(({ icon, label, active }) => (
@@ -707,9 +710,6 @@ function DashboardScreen() {
           </label>
 
           <div className="home-actions">
-            <button type="button" className="company-pill">
-              <span>TGV</span>
-            </button>
             <button type="button">☾</button>
             <button type="button">☷</button>
             <button type="button">?</button>
