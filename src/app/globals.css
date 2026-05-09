@@ -506,33 +506,38 @@ a {
 
 .home-logo {
   width: max-content;
-  min-width: 106px;
-  height: 42px;
+  height: 44px;
   display: flex;
   align-items: center;
-  gap: 1px;
+  gap: 10px;
   margin-left: 6px;
-  padding: 0 15px;
-  border: 1px solid #bbf7d0;
-  border-radius: 13px;
-  background: linear-gradient(180deg, #16a34a, #0f8f45);
-  color: #ffffff;
-  box-shadow: 0 12px 24px rgba(15, 143, 69, 0.22);
-  letter-spacing: -0.01em;
-}
-
-.home-logo span,
-.home-logo strong {
-  font-size: 18px;
-  line-height: 1;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #0f172a;
+  box-shadow: none;
 }
 
 .home-logo span {
-  font-weight: 800;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+  box-shadow: 0 8px 18px rgba(22, 163, 74, 0.2);
 }
 
 .home-logo strong {
-  font-weight: 950;
+  color: #0f172a;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
 }
 
 .home-nav {

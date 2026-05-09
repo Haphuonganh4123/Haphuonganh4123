@@ -628,8 +628,8 @@ function DashboardScreen() {
     <main className="home-shell">
       <aside className="home-sidebar">
         <div className="home-logo">
-          <span>next</span>
-          <strong>X</strong>
+          <span>NX</span>
+          <strong>nextX</strong>
         </div>
 
         <nav className="home-nav" aria-label="Dashboard navigation">
