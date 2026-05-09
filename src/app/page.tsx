@@ -1194,50 +1194,52 @@ function EmployeeProfileSection() {
 
   return (
     <>
-      <section className="employee-hero employee-directory-hero">
-        <div>
-          <h1>Hồ sơ nhân viên</h1>
-          <p>Quản lý hồ sơ nhân viên, cơ cấu tổ chức, phòng ban và phân quyền.</p>
-        </div>
-      </section>
+      <section className="employee-sticky-header">
+        <section className="employee-hero employee-directory-hero">
+          <div>
+            <h1>Hồ sơ nhân viên</h1>
+            <p>Quản lý hồ sơ nhân viên, cơ cấu tổ chức, phòng ban và phân quyền.</p>
+          </div>
+        </section>
 
-      <section className="employee-top-tabs" aria-label="Loại hồ sơ">
-        {[
-          ["Danh sách nhân viên", "DS"],
-          ["Danh sách nghỉ hưu", "NH"],
-          ["Người nước ngoài", "NN"],
-        ].map(([item, icon], index) => (
-          <button type="button" className={index === 0 ? "active" : ""} key={item}>
-            <span>{icon}</span>
-            {item}
-          </button>
-        ))}
-      </section>
+        <section className="employee-top-tabs" aria-label="Loại hồ sơ">
+          {[
+            ["Danh sách nhân viên", "DS"],
+            ["Danh sách nghỉ hưu", "NH"],
+            ["Người nước ngoài", "NN"],
+          ].map(([item, icon], index) => (
+            <button type="button" className={index === 0 ? "active" : ""} key={item}>
+              <span>{icon}</span>
+              {item}
+            </button>
+          ))}
+        </section>
 
-      <section className="employee-status-tabs" aria-label="Trạng thái hồ sơ">
-        {[
-          ["Đang làm việc", "282"],
-          ["Mới (30 ngày)", "0"],
-          ["Đã nghỉ việc", "7"],
-        ].map(([label, count], index) => (
-          <button type="button" className={index === 0 ? "active" : ""} key={label}>
-            {label}
-            <span>{count}</span>
-          </button>
-        ))}
-      </section>
+        <section className="employee-status-tabs" aria-label="Trạng thái hồ sơ">
+          {[
+            ["Đang làm việc", "282"],
+            ["Mới (30 ngày)", "0"],
+            ["Đã nghỉ việc", "7"],
+          ].map(([label, count], index) => (
+            <button type="button" className={index === 0 ? "active" : ""} key={label}>
+              {label}
+              <span>{count}</span>
+            </button>
+          ))}
+        </section>
 
-      <section className="employee-stat-row">
-        {employeeStats.map(([value, label, note, tone]) => (
-          <article className="employee-stat-card employee-directory-stat" key={label}>
-            <span className="employee-stat-icon">{tone}</span>
-            <div>
-              <strong>{value}</strong>
-              <span>{label}</span>
-              <small>{note}</small>
-            </div>
-          </article>
-        ))}
+        <section className="employee-stat-row">
+          {employeeStats.map(([value, label, note, tone]) => (
+            <article className="employee-stat-card employee-directory-stat" key={label}>
+              <span className="employee-stat-icon">{tone}</span>
+              <div>
+                <strong>{value}</strong>
+                <span>{label}</span>
+                <small>{note}</small>
+              </div>
+            </article>
+          ))}
+        </section>
       </section>
 
       <section className="employee-workspace employee-directory-workspace">

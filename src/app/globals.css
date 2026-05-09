@@ -2396,6 +2396,30 @@ a {
   margin-top: 22px;
 }
 
+.employee-sticky-header {
+  position: sticky;
+  top: 77px;
+  z-index: 7;
+  margin: -30px -42px 0 -40px;
+  padding: 30px 42px 20px 40px;
+  border-bottom: 1px solid #e6ebf1;
+  background: rgba(248, 250, 252, 0.98);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.04);
+  backdrop-filter: blur(10px);
+}
+
+.employee-sticky-header .employee-top-tabs,
+.employee-sticky-header .employee-status-tabs {
+  margin-left: -42px;
+  margin-right: -42px;
+  padding-left: 42px;
+  padding-right: 42px;
+}
+
+.employee-sticky-header .employee-status-tabs {
+  margin-bottom: 20px;
+}
+
 .employee-directory-hero {
   margin-bottom: 20px;
   padding: 4px 0 0;
