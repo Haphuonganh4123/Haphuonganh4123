@@ -467,6 +467,7 @@ export default function Home() {
 function DashboardScreen() {
   const [activeModule, setActiveModule] = useState<"overview" | "employees">("overview");
   const [overviewTab, setOverviewTab] = useState<"dashboard" | "calendar">("dashboard");
+  const [expandedMenu, setExpandedMenu] = useState("Tổng quan");
 
   const sidebarItems = [
     { icon: "overview", label: "Tổng quan", active: activeModule === "overview" },
@@ -479,6 +480,17 @@ function DashboardScreen() {
     { icon: "reports", label: "Báo cáo", active: false },
     { icon: "settings", label: "Cài đặt", active: false },
   ];
+
+  const menuChildren: Record<string, string[]> = {
+    "Hồ sơ nhân viên": ["Danh sách hồ sơ", "Thêm nhân viên", "Quá trình nhân sự"],
+    "Nghỉ phép": ["Quản lý nghỉ phép", "Cấu hình phép", "Báo cáo phép", "Chuyển phép tồn"],
+    "Chấm công": ["Bảng công tháng", "Xếp ca", "Dữ liệu máy chấm công", "OT tự động"],
+    "Tiền lương": ["Tổng hợp lương", "Tính lương tháng", "Đăng ký bổ sung", "Thiết lập tiền lương"],
+    "Đào tạo": ["Lịch đào tạo", "Lịch sử đào tạo"],
+    "Phúc lợi": ["Phụ cấp", "Bảo hiểm", "Người phụ thuộc"],
+    "Báo cáo": ["Báo cáo nhân sự", "Báo cáo chấm công", "Báo cáo tiền lương"],
+    "Cài đặt": ["Tài khoản", "Phân quyền", "Audit log"],
+  };
 
   const kpis = [
     ["NV", "300", "Tổng Nhân Viên", "5 phòng ban", "+12 tháng này", "green"],
@@ -640,15 +652,16 @@ function DashboardScreen() {
               key={label}
               onClick={(event) => {
                 event.preventDefault();
+                setExpandedMenu(expandedMenu === label ? "" : label);
                 setActiveModule("overview");
               }}
             >
               <span className="menu-icon"><MenuIcon name={icon} /></span>
               <strong>{label}</strong>
-              <em>›</em>
+              <em>{expandedMenu === label ? "∨" : "›"}</em>
             </a>
           ))}
-          {activeModule === "overview" ? (
+          {expandedMenu === "Tổng quan" ? (
             <>
               <button
                 className={`home-subnav ${overviewTab === "dashboard" ? "" : "muted"}`}
@@ -669,21 +682,42 @@ function DashboardScreen() {
             </>
           ) : null}
           {sidebarItems.slice(1).map(({ icon, label, active }) => (
-            <a
-              className={active ? "active" : ""}
-              href="#dashboard"
-              key={label}
-              onClick={(event) => {
-                if (label === "Hồ sơ nhân viên") {
+            <div className="menu-group" key={label}>
+              <a
+                className={active ? "active" : ""}
+                href="#dashboard"
+                onClick={(event) => {
                   event.preventDefault();
+                  setExpandedMenu(expandedMenu === label ? "" : label);
+                  if (label === "Hồ sơ nhân viên") {
                   setActiveModule("employees");
                 }
               }}
-            >
-              <span className="menu-icon"><MenuIcon name={icon} /></span>
-              <strong>{label}</strong>
-              <em>›</em>
-            </a>
+              >
+                <span className="menu-icon"><MenuIcon name={icon} /></span>
+                <strong>{label}</strong>
+                <em>{expandedMenu === label ? "∨" : "›"}</em>
+              </a>
+              {expandedMenu === label
+                ? menuChildren[label]?.map((child, index) => (
+                    <button
+                      className={`home-subnav ${
+                        label === "Hồ sơ nhân viên" && index === 0 ? "" : "muted"
+                      }`}
+                      type="button"
+                      key={child}
+                      onClick={() => {
+                        if (label === "Hồ sơ nhân viên") {
+                          setActiveModule("employees");
+                        }
+                      }}
+                    >
+                      <span />
+                      <strong>{child}</strong>
+                    </button>
+                  ))
+                : null}
+            </div>
           ))}
         </nav>
 

@@ -546,6 +546,11 @@ a {
   margin-top: 34px;
 }
 
+.menu-group {
+  display: grid;
+  gap: 5px;
+}
+
 .home-nav a,
 .home-subnav {
   min-height: 45px;
