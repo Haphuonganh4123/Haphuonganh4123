@@ -1170,6 +1170,307 @@ function EmployeeProfileSection() {
   const [profileTab, setProfileTab] = useState("overview");
 
   const employeeStats = [
+    ["300", "Tổng nhân sự", "5 phòng ban", "people"],
+    ["282", "Đang làm việc", "94% tổng nhân sự", "active"],
+    ["0", "Mới 30 ngày", "Chưa phát sinh mới", "new"],
+    ["7", "Đã nghỉ việc", "Cần lưu hồ sơ", "off"],
+  ];
+
+  const employees = [
+    ["EMP0235", "Bùi Anh Cường", "cuong.bui235@company.com", "Marketing", "Data Analyst", "Đà Nẵng", "8/6/2024", "Đang làm"],
+    ["EMP0256", "Bùi Anh Cường", "cuong.bui256@company.com", "Kinh Doanh", "Product Manager", "Cần Thơ", "27/12/2021", "Đang làm"],
+    ["EMP0271", "Đỗ Thị Hà", "ha.do271@company.com", "Nhân Sự", "HR Executive", "Hà Nội", "14/3/2023", "Đang làm"],
+    ["EMP0290", "Lê Minh Châu", "chau.le290@company.com", "Công Nghệ Thông Tin", "System Admin", "TP.HCM", "21/6/2021", "Đang làm"],
+    ["EMP0318", "Phạm Quốc Dũng", "dung.pham318@company.com", "Tài Chính", "Accountant", "Đà Nẵng", "16/8/2022", "Đang làm"],
+    ["EMP0342", "Trần Thị Bình", "binh.tran342@company.com", "Nhân Sự", "Recruiter", "Hà Nội", "4/5/2026", "Mới"],
+  ];
+
+  const departments = [
+    ["Tất cả", "293", "all"],
+    ["Công Nghệ Thông Tin", "60", "dept"],
+    ["Kinh Doanh", "61", "dept"],
+    ["Marketing", "62", "dept"],
+    ["Nhân Sự", "54", "dept"],
+    ["Tài Chính", "56", "dept"],
+  ];
+
+  const profileTabs = [
+    ["overview", "Tổng quan"],
+    ["personal", "Cá nhân"],
+    ["work", "Công việc"],
+    ["history", "Quá trình"],
+    ["bank", "Ngân hàng"],
+    ["audit", "Audit"],
+  ];
+
+  const profileFields: Record<string, string[][]> = {
+    overview: [
+      ["Mã nhân viên", "EMP0235"],
+      ["Trạng thái", "Đang làm việc"],
+      ["Ngày vào", "08/06/2024"],
+      ["Ngày ký HĐLĐ", "08/08/2024"],
+      ["Bộ phận", "Marketing"],
+      ["Chức danh", "Data Analyst"],
+    ],
+    personal: [
+      ["CCCD", "********1234"],
+      ["Ngày sinh", "12/09/1998"],
+      ["SĐT", "********90"],
+      ["Email", "cuong.bui235@company.com"],
+      ["Địa chỉ", "Đà Nẵng"],
+      ["PDPA", "Đã ký phụ lục"],
+    ],
+    work: [
+      ["Chi nhánh", "Đà Nẵng"],
+      ["Khối/Ban", "Back Office"],
+      ["Phòng", "Marketing"],
+      ["Cost Center", "MKT-062"],
+      ["Quản lý", "Hồ Thị Vy"],
+      ["Tài khoản", "Đang hoạt động"],
+    ],
+    history: [
+      ["Công việc", "2 lần điều chuyển"],
+      ["Lương cơ bản", "Ẩn theo quyền"],
+      ["Phụ cấp", "Housing, Productivity"],
+      ["Lương BH", "Theo chính sách"],
+      ["KPI", "A · 110%"],
+      ["Snapshot", "01/01/2026"],
+    ],
+    bank: [
+      ["Ngân hàng", "Vietinbank"],
+      ["Số tài khoản", "******7890"],
+      ["Chi nhánh", "Đà Nẵng"],
+      ["Tài khoản chính", "Có"],
+      ["Quyền xem", "Payroll Admin"],
+      ["Trạng thái", "Đã xác minh"],
+    ],
+    audit: [
+      ["Tạo hồ sơ", "HR Admin · 08/06/2024"],
+      ["Cập nhật lương", "Payroll Admin · 01/01/2026"],
+      ["Export gần nhất", "HR Admin · 07/05/2026"],
+      ["Trường nhạy cảm", "Đã mask khi xem"],
+      ["Version", "v18"],
+      ["Xung đột", "Optimistic locking bật"],
+    ],
+  };
+
+  const processItems = [
+    ["Thay đổi công việc", "Marketing / Data Team", "Hiệu lực 01/03/2025"],
+    ["Lương cơ bản", "Ẩn theo quyền", "Hiệu lực 01/01/2026"],
+    ["Phụ cấp Housing", "300.000đ", "Không hard-code"],
+    ["Đánh giá KPI", "Loại A · 110%", "Áp dụng từ T01/2026"],
+  ];
+
+  return (
+    <>
+      <section className="employee-hero employee-directory-hero">
+        <div>
+          <h1>Hồ sơ nhân viên</h1>
+          <p>Quản lý hồ sơ nhân viên, cơ cấu tổ chức, phòng ban và phân quyền.</p>
+        </div>
+      </section>
+
+      <section className="employee-top-tabs" aria-label="Loại hồ sơ">
+        {["Danh sách nhân viên", "Danh sách nghỉ hưu", "Người nước ngoài"].map((item, index) => (
+          <button type="button" className={index === 0 ? "active" : ""} key={item}>
+            <span>{index === 0 ? "👥" : index === 1 ? "♿" : "◎"}</span>
+            {item}
+          </button>
+        ))}
+      </section>
+
+      <section className="employee-status-tabs" aria-label="Trạng thái hồ sơ">
+        {[
+          ["Đang làm việc", "282"],
+          ["Mới (30 ngày)", "0"],
+          ["Đã nghỉ việc", "7"],
+        ].map(([label, count], index) => (
+          <button type="button" className={index === 0 ? "active" : ""} key={label}>
+            {label}
+            <span>{count}</span>
+          </button>
+        ))}
+      </section>
+
+      <section className="employee-stat-row">
+        {employeeStats.map(([value, label, note, tone]) => (
+          <article className="employee-stat-card employee-directory-stat" key={label}>
+            <span className={`employee-stat-icon ${tone}`}>
+              {tone === "people" ? "👥" : tone === "active" ? "✓" : tone === "new" ? "↗" : "−"}
+            </span>
+            <div>
+              <strong>{value}</strong>
+              <span>{label}</span>
+              <small>{note}</small>
+            </div>
+          </article>
+        ))}
+      </section>
+
+      <section className="employee-workspace employee-directory-workspace">
+        <article className="dashboard-panel employee-list-panel">
+          <div className="employee-toolbar employee-directory-toolbar">
+            <label>
+              <span>⌕</span>
+              <input placeholder="Tìm theo tên, mã NV, email, phòng ban, chức vụ, số điện thoại..." />
+            </label>
+            <button type="button" className="employee-filter-button">☷ Lọc</button>
+            <div className="employee-view-toggle">
+              <button type="button" className="active">☰</button>
+              <button type="button">▦</button>
+            </div>
+            <button type="button" className="employee-action-button">↥ Import</button>
+            <button type="button" className="employee-action-button">⇩ Xuất</button>
+            <button type="button" className="primary-action">+ Thêm nhân viên</button>
+          </div>
+
+          <div className="employee-table-shell">
+            <aside className="employee-department-filter">
+              <div className="employee-table-caption">PHÒNG BAN</div>
+              {departments.map(([label, count, kind], index) => (
+                <button type="button" className={index === 0 ? "active" : ""} key={label}>
+                  <span>{kind === "all" ? "👥" : "▤"}</span>
+                  <strong>{label}</strong>
+                  <em>{count}</em>
+                </button>
+              ))}
+            </aside>
+
+            <div className="employee-table-area">
+              <div className="employee-table-meta">
+                <span>Hiển thị <strong>1-50</strong> trong <strong>293</strong> kết quả</span>
+                <label>
+                  Hiển thị
+                  <select defaultValue="50">
+                    <option value="50">50 dòng</option>
+                    <option value="100">100 dòng</option>
+                  </select>
+                </label>
+              </div>
+
+              <div className="employee-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th><input type="checkbox" aria-label="Chọn tất cả" /></th>
+                      <th>Mã NV</th>
+                      <th>Họ và tên</th>
+                      <th>Phòng ban</th>
+                      <th>Chức vụ</th>
+                      <th>Chi nhánh</th>
+                      <th>Ngày vào</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {employees.map((row, index) => (
+                      <tr className={index === 1 ? "selected" : ""} key={row[0]}>
+                        <td><input type="checkbox" aria-label={`Chọn ${row[1]}`} /></td>
+                        <td><strong className="employee-code">{row[0]}</strong></td>
+                        <td>
+                          <div className="employee-name-cell">
+                            <span>{row[1].split(" ").map((word) => word[0]).slice(-2).join("")}</span>
+                            <div>
+                              <strong>{row[1]}</strong>
+                              <small>{row[2]}</small>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{row[3]}</td>
+                        <td>{row[4]}</td>
+                        <td><span className="employee-branch-pill">{row[5]}</span></td>
+                        <td>{row[6]}</td>
+                        <td><span className={`employee-status-pill ${row[7] === "Mới" ? "new" : ""}`}>{row[7]}</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="employee-pagination">
+                <span>Trang 1/6</span>
+                <div>
+                  {["«", "‹", "1", "2", "3", "4", "5", "›", "»"].map((item) => (
+                    <button type="button" className={item === "1" ? "active" : ""} key={item}>{item}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section className="employee-detail-workspace">
+        <aside className="dashboard-panel employee-detail-panel">
+          <div className="employee-profile-head">
+            <span>BC</span>
+            <div>
+              <h2>Bùi Anh Cường</h2>
+              <p>EMP0235 · Marketing · Data Analyst</p>
+            </div>
+          </div>
+
+          <div className="employee-tabs">
+            {profileTabs.map(([key, label]) => (
+              <button
+                type="button"
+                className={profileTab === key ? "active" : ""}
+                key={key}
+                onClick={() => setProfileTab(key)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div className="profile-field-grid">
+            {profileFields[profileTab].map(([label, value]) => (
+              <div key={label}>
+                <span>{label}</span>
+                <strong>{value}</strong>
+              </div>
+            ))}
+          </div>
+
+          <div className="process-card-list">
+            <h3>Quá trình hiện hành</h3>
+            {processItems.map(([label, value, note]) => (
+              <article key={label}>
+                <div>
+                  <span>{label}</span>
+                  <strong>{value}</strong>
+                </div>
+                <small>{note}</small>
+              </article>
+            ))}
+          </div>
+        </aside>
+
+        <article className="dashboard-panel employee-rule-panel">
+          <div className="employee-section-heading">
+            <h2>Quy tắc dữ liệu & bảo mật</h2>
+            <p>Các điều kiện chính trước khi tạo mới, import, export hoặc xem trường nhạy cảm.</p>
+          </div>
+          <div className="employee-rule-list">
+            {[
+              "Mã NV tối đa 5 ký tự, unique và không đổi sau khi tạo",
+              "CCCD 12 số, lưu mã hóa và chỉ hiển thị dạng mask",
+              "Ngày kết thúc thử việc/học việc bắt buộc để sinh HĐ lần 1",
+              "Export Excel phải ghi audit log và kiểm tra quyền trường nhạy cảm",
+            ].map((rule) => (
+              <span key={rule}>{rule}</span>
+            ))}
+          </div>
+        </article>
+      </section>
+    </>
+  );
+}
+
+function EmployeeProfileSectionLegacy() {
+  const [profileTab, setProfileTab] = useState("overview");
+
+  const employeeStats = [
     ["300", "Tổng hồ sơ", "292 đang làm việc"],
     ["18", "Hồ sơ cần bổ sung", "CCCD, tài khoản NH, NPT"],
     ["08", "Sắp hết thử việc", "Cần đánh giá trong 7 ngày"],
