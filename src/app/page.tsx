@@ -658,7 +658,7 @@ function DashboardScreen() {
             >
               <span className="menu-icon"><MenuIcon name={icon} /></span>
               <strong>{label}</strong>
-              <em>{expandedMenu === label ? "∨" : "›"}</em>
+              <span className="chevron-icon"><ChevronIcon open={expandedMenu === label} /></span>
             </a>
           ))}
           {expandedMenu === "Tổng quan" ? (
@@ -696,7 +696,7 @@ function DashboardScreen() {
               >
                 <span className="menu-icon"><MenuIcon name={icon} /></span>
                 <strong>{label}</strong>
-                <em>{expandedMenu === label ? "∨" : "›"}</em>
+                <span className="chevron-icon"><ChevronIcon open={expandedMenu === label} /></span>
               </a>
               {expandedMenu === label
                 ? menuChildren[label]?.map((child, index) => (
@@ -1147,6 +1147,21 @@ function MenuIcon({ name }: { name: string }) {
           <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-2 .4l-.2.2a1.7 1.7 0 0 0-.5 1.1H9.1a1.7 1.7 0 0 0-.5-1.1l-.2-.2a1.7 1.7 0 0 0-2-.4l-.2.1-2-3.4.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3v-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 2-.4l.2-.2A1.7 1.7 0 0 0 9.1 2h5.8a1.7 1.7 0 0 0 .5 1.1l.2.2a1.7 1.7 0 0 0 2 .4l.2-.1 2 3.4-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.1v4h-.1a1.7 1.7 0 0 0-1.5 1z" {...common} />
         </>
       ) : null}
+    </svg>
+  );
+}
+
+function ChevronIcon({ open }: { open: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d={open ? "M6 9l6 6 6-6" : "M9 6l6 6-6 6"}
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.4"
+      />
     </svg>
   );
 }
