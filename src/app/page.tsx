@@ -1167,6 +1167,10 @@ function ChevronIcon({ open }: { open: boolean }) {
 }
 
 function EmployeeProfileSection() {
+  const [directoryTab, setDirectoryTab] = useState<"employees" | "retirement" | "foreigners">("employees");
+  const [modalType, setModalType] = useState<"employee" | "retirement" | "foreigner" | null>(null);
+  const [modalStep, setModalStep] = useState("personal");
+
   const employeeStats = [
     ["300", "Tổng nhân sự", "5 phòng ban", "NV"],
     ["282", "Đang làm việc", "94% tổng nhân sự", "LV"],
@@ -1192,6 +1196,242 @@ function EmployeeProfileSection() {
     ["Tài Chính", "56", "dept"],
   ];
 
+  const directoryTabs = [
+    ["employees", "Danh sách nhân viên", "DS"],
+    ["retirement", "Danh sách nghỉ hưu", "NH"],
+    ["foreigners", "Người nước ngoài", "NN"],
+  ];
+
+  const retirementRows = [
+    ["NV001", "Nguyễn Văn A", "60 tuổi", "Nam", "Nhân sự", "Trưởng phòng", "15/5/1966", "15/5/2026", "15/2/2026", "1/3/2026"],
+    ["NV002", "Trần Thị B", "55 tuổi", "Nữ", "Kế toán", "Kế toán trưởng", "20/8/1971", "20/8/2026", "10/3/2026", "Chưa QĐ"],
+    ["NV003", "Lê Văn C", "60 tuổi", "Nam", "Kỹ thuật", "Chuyên viên cao cấp", "10/12/1966", "10/12/2026", "Chưa TB", "Chưa QĐ"],
+  ];
+
+  const foreignRows = [
+    ["NV101", "John Smith", "Chuyên gia IT", "Mỹ", "Kỹ thuật", "P123456789", "15/1/2030", "VN20240001", "DN", "30/6/2027", "WP20240001", "31/12/2026"],
+    ["NV102", "Tanaka Yuki", "Quản lý sản xuất", "Nhật Bản", "Sản xuất", "JP987654321", "20/5/2029", "VN20230045", "LĐ", "31/3/2026", "WP20230045", "31/3/2026"],
+    ["NV103", "Kim Min-jun", "Marketing Manager", "Hàn Quốc", "Marketing", "KR456789123", "10/3/2031", "VN20250012", "DN", "15/6/2026", "WP20250012", "14/1/2027"],
+  ];
+
+  const modalTabs = [
+    ["personal", "Thông tin cá nhân"],
+    ["work", "Thông tin công việc"],
+    ["salary", "Thông tin lương"],
+    ["allowance", "Thông tin phụ cấp"],
+    ["other", "Thông tin khác"],
+  ];
+
+  const modalTitle =
+    modalType === "retirement"
+      ? "Thêm nhân viên vào danh sách nghỉ hưu"
+      : modalType === "foreigner"
+        ? "Thêm người nước ngoài"
+        : "Thêm nhân viên mới";
+
+  const renderEmployeeModalBody = () => {
+    if (modalStep === "work") {
+      return (
+        <div className="employee-modal-grid">
+          <Field label="Mã nhân viên *" placeholder="EMP0001" />
+          <Field label="Ngày vào làm *" placeholder="yyyy-mm-dd" type="date" />
+          <Field label="Phòng ban *" placeholder="Chọn phòng ban" asSelect />
+          <Field label="Chức vụ *" placeholder="Chọn chức vụ" asSelect />
+          <Field label="Cấp bậc" placeholder="Chọn cấp bậc" asSelect />
+          <Field label="Loại hợp đồng *" placeholder="Toàn thời gian" asSelect />
+          <Field label="Chi nhánh" placeholder="Chọn chi nhánh" asSelect />
+          <Field label="Quản lý trực tiếp" placeholder="Tên người quản lý" />
+        </div>
+      );
+    }
+
+    if (modalStep === "salary") {
+      return (
+        <div className="employee-modal-grid">
+          <Field label="Lương cơ bản (VNĐ) *" placeholder="15000000" />
+          <Field label="Loại lương *" placeholder="Theo tháng" asSelect />
+          <div className="employee-modal-note">Lưu ý: Lương cơ bản chưa bao gồm các khoản phụ cấp, thưởng và bảo hiểm.</div>
+        </div>
+      );
+    }
+
+    if (modalStep === "allowance") {
+      return (
+        <div className="allowance-list">
+          {[
+            ["Phụ cấp ăn trưa", "1000000"],
+            ["Phụ cấp xăng xe", "500000"],
+            ["Phụ cấp điện thoại", "300000"],
+          ].map(([type, value]) => (
+            <div className="allowance-row" key={type}>
+              <Field label="Loại phụ cấp" placeholder={type} />
+              <Field label="Số tiền (VNĐ)" placeholder={value} />
+            </div>
+          ))}
+          <button type="button" className="employee-dashed-action">+ Thêm phụ cấp</button>
+        </div>
+      );
+    }
+
+    if (modalStep === "other") {
+      return (
+        <div className="employee-modal-stack">
+          <h3>Thông tin ngân hàng</h3>
+          <div className="employee-modal-grid">
+            <Field label="Tên ngân hàng" placeholder="Vietcombank" />
+            <Field label="Số tài khoản" placeholder="1234567890" />
+            <Field label="Tên chủ tài khoản" placeholder="NGUYEN VAN A" wide />
+          </div>
+          <h3>Liên hệ khẩn cấp</h3>
+          <div className="employee-modal-grid">
+            <Field label="Tên người liên hệ" placeholder="Họ và tên" />
+            <Field label="Số điện thoại" placeholder="0912345678" />
+            <Field label="Trình độ học vấn" placeholder="Chọn trình độ" asSelect wide />
+            <Field label="Ghi chú" placeholder="Thông tin bổ sung..." textarea wide />
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="employee-modal-stack">
+        <div className="avatar-upload">
+          <span>↑</span>
+          <div>
+            <strong>Ảnh đại diện</strong>
+            <small>Kích thước tối đa 5MB. Định dạng: JPG, PNG, GIF</small>
+          </div>
+        </div>
+        <div className="employee-modal-grid">
+          <Field label="Họ và tên *" placeholder="Nhập họ và tên" wide />
+          <Field label="Ngày sinh *" placeholder="yyyy-mm-dd" type="date" />
+          <Field label="Giới tính *" placeholder="Nam" asSelect />
+          <Field label="CMND/CCCD *" placeholder="Số CMND/CCCD" />
+          <Field label="Ngày cấp" placeholder="yyyy-mm-dd" type="date" />
+          <Field label="Nơi cấp" placeholder="Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư" wide />
+          <Field label="Số điện thoại *" placeholder="0912345678" />
+          <Field label="Email *" placeholder="example@company.com" />
+          <Field label="Địa chỉ thường trú" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố" textarea wide />
+        </div>
+      </div>
+    );
+  };
+
+  const renderModal = () => {
+    if (!modalType) return null;
+
+    if (modalType === "retirement") {
+      return (
+        <div className="employee-modal-backdrop">
+          <div className="employee-modal retirement-modal">
+            <div className="employee-modal-head green">
+              <h2>{modalTitle}</h2>
+              <button type="button" onClick={() => setModalType(null)}>×</button>
+            </div>
+            <div className="employee-modal-body employee-modal-grid">
+              <Field label="Mã nhân viên *" placeholder="Nhập mã nhân viên" />
+              <Field label="Họ và tên *" placeholder="Nhập họ và tên" />
+              <Field label="Giới tính *" placeholder="Nam" asSelect />
+              <Field label="Phòng ban *" placeholder="Nhập phòng ban" />
+              <Field label="Chức vụ" placeholder="Nhập chức vụ" />
+              <Field label="Ngày sinh *" placeholder="yyyy-mm-dd" type="date" />
+              <Field label="Ngày dự kiến nghỉ hưu *" placeholder="yyyy-mm-dd" type="date" />
+              <Field label="Ngày thông báo" placeholder="yyyy-mm-dd" type="date" />
+              <Field label="Ngày ra quyết định" placeholder="yyyy-mm-dd" type="date" />
+            </div>
+            <div className="employee-modal-foot">
+              <button type="button" onClick={() => setModalType(null)}>Hủy</button>
+              <button type="button" className="primary-action" onClick={() => setModalType(null)}>Thêm mới</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (modalType === "foreigner") {
+      return (
+        <div className="employee-modal-backdrop blue">
+          <div className="employee-modal foreigner-modal">
+            <div className="employee-modal-head green">
+              <h2>{modalTitle}</h2>
+              <button type="button" onClick={() => setModalType(null)}>×</button>
+            </div>
+            <div className="employee-modal-body employee-modal-stack">
+              <h3>Thông tin cơ bản</h3>
+              <div className="employee-modal-grid">
+                <Field label="Mã nhân viên *" placeholder="Nhập mã nhân viên" />
+                <Field label="Họ và tên *" placeholder="Nhập họ và tên" />
+                <Field label="Quốc tịch *" placeholder="Nhập quốc tịch" />
+                <Field label="Phòng ban *" placeholder="Nhập phòng ban" />
+                <Field label="Chức vụ" placeholder="Nhập chức vụ" wide />
+              </div>
+              <h3>Thông tin Passport</h3>
+              <div className="employee-modal-grid three">
+                <Field label="Số Passport *" placeholder="Nhập số Passport" />
+                <Field label="Ngày cấp *" placeholder="yyyy-mm-dd" type="date" />
+                <Field label="Ngày hết hạn *" placeholder="yyyy-mm-dd" type="date" />
+              </div>
+              <h3>Thông tin Visa</h3>
+              <div className="employee-modal-grid three">
+                <Field label="Số Visa *" placeholder="Nhập số Visa" />
+                <Field label="Loại Visa *" placeholder="DN - Nhà đầu tư" asSelect />
+                <Field label="Ngày hết hạn *" placeholder="yyyy-mm-dd" type="date" />
+              </div>
+              <h3>Thông tin Giấy phép lao động</h3>
+              <div className="employee-modal-grid three">
+                <Field label="Số giấy phép *" placeholder="Nhập số giấy phép" />
+                <Field label="Ngày cấp *" placeholder="yyyy-mm-dd" type="date" />
+                <Field label="Ngày hết hạn *" placeholder="yyyy-mm-dd" type="date" />
+              </div>
+            </div>
+            <div className="employee-modal-foot">
+              <button type="button" onClick={() => setModalType(null)}>Hủy</button>
+              <button type="button" className="primary-action" onClick={() => setModalType(null)}>Thêm mới</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const stepNumber = modalTabs.findIndex(([key]) => key === modalStep) + 1;
+
+    return (
+      <div className="employee-modal-backdrop">
+        <div className="employee-modal">
+          <div className="employee-modal-head">
+            <h2>{modalTitle}</h2>
+            <button type="button" onClick={() => setModalType(null)}>×</button>
+          </div>
+          <div className="employee-modal-tabs">
+            {modalTabs.map(([key, label]) => (
+              <button
+                type="button"
+                className={modalStep === key ? "active" : ""}
+                key={key}
+                onClick={() => setModalStep(key)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <div className="employee-modal-body">{renderEmployeeModalBody()}</div>
+          <div className="employee-modal-foot">
+            <span>Bước {stepNumber}/5</span>
+            <div>
+              <button type="button" onClick={() => setModalType(null)}>Hủy</button>
+              <button type="button" className="primary-action" onClick={() => setModalType(null)}>Tạo nhân viên</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const openModal = (type: "employee" | "retirement" | "foreigner") => {
+    setModalType(type);
+    setModalStep("personal");
+  };
+
   return (
     <>
       <section className="employee-sticky-header">
@@ -1203,138 +1443,303 @@ function EmployeeProfileSection() {
         </section>
 
         <section className="employee-top-tabs" aria-label="Loại hồ sơ">
-          {[
-            ["Danh sách nhân viên", "DS"],
-            ["Danh sách nghỉ hưu", "NH"],
-            ["Người nước ngoài", "NN"],
-          ].map(([item, icon], index) => (
-            <button type="button" className={index === 0 ? "active" : ""} key={item}>
+          {directoryTabs.map(([key, item, icon]) => (
+            <button
+              type="button"
+              className={directoryTab === key ? "active" : ""}
+              key={key}
+              onClick={() => setDirectoryTab(key as "employees" | "retirement" | "foreigners")}
+            >
               <span>{icon}</span>
               {item}
             </button>
           ))}
         </section>
 
-        <section className="employee-status-tabs" aria-label="Trạng thái hồ sơ">
-          {[
-            ["Đang làm việc", "282"],
-            ["Mới (30 ngày)", "0"],
-            ["Đã nghỉ việc", "7"],
-          ].map(([label, count], index) => (
-            <button type="button" className={index === 0 ? "active" : ""} key={label}>
-              {label}
-              <span>{count}</span>
-            </button>
-          ))}
-        </section>
+        {directoryTab === "employees" ? (
+          <>
+            <section className="employee-status-tabs" aria-label="Trạng thái hồ sơ">
+              {[
+                ["Đang làm việc", "282"],
+                ["Mới (30 ngày)", "0"],
+                ["Đã nghỉ việc", "7"],
+              ].map(([label, count], index) => (
+                <button type="button" className={index === 0 ? "active" : ""} key={label}>
+                  {label}
+                  <span>{count}</span>
+                </button>
+              ))}
+            </section>
 
-        <section className="employee-stat-row">
-          {employeeStats.map(([value, label, note, tone]) => (
-            <article className="employee-stat-card employee-directory-stat" key={label}>
-              <span className="employee-stat-icon">{tone}</span>
-              <div>
-                <strong>{value}</strong>
-                <span>{label}</span>
-                <small>{note}</small>
-              </div>
-            </article>
-          ))}
-        </section>
+            <section className="employee-stat-row">
+              {employeeStats.map(([value, label, note, tone]) => (
+                <article className="employee-stat-card employee-directory-stat" key={label}>
+                  <span className="employee-stat-icon">{tone}</span>
+                  <div>
+                    <strong>{value}</strong>
+                    <span>{label}</span>
+                    <small>{note}</small>
+                  </div>
+                </article>
+              ))}
+            </section>
+          </>
+        ) : null}
       </section>
 
       <section className="employee-workspace employee-directory-workspace">
         <article className="dashboard-panel employee-list-panel">
-          <div className="employee-toolbar employee-directory-toolbar">
-            <label>
-              <span>⌕</span>
-              <input placeholder="Tìm theo tên, mã NV, email, phòng ban, chức vụ, số điện thoại..." />
-            </label>
-            <button type="button" className="employee-filter-button">Bộ lọc</button>
-            <div className="employee-view-toggle">
-              <button type="button" className="active">List</button>
-              <button type="button">Grid</button>
-            </div>
-            <button type="button" className="employee-action-button">Import</button>
-            <button type="button" className="employee-action-button">Xuất</button>
-            <button type="button" className="primary-action">+ Thêm nhân viên</button>
-          </div>
-
-          <div className="employee-table-shell">
-            <aside className="employee-department-filter">
-              <div className="employee-table-caption">PHÒNG BAN</div>
-              {departments.map(([label, count, kind], index) => (
-                <button type="button" className={index === 0 ? "active" : ""} key={label}>
-                  <span>{kind === "all" ? "ALL" : "PB"}</span>
-                  <strong>{label}</strong>
-                  <em>{count}</em>
-                </button>
-              ))}
-            </aside>
-
-            <div className="employee-table-area">
-              <div className="employee-table-meta">
-                <span>Hiển thị <strong>1-50</strong> trong <strong>293</strong> kết quả</span>
+          {directoryTab === "employees" ? (
+            <>
+              <div className="employee-toolbar employee-directory-toolbar">
                 <label>
-                  Hiển thị
-                  <select defaultValue="50">
-                    <option value="50">50 dòng</option>
-                    <option value="100">100 dòng</option>
-                  </select>
+                  <span>⌕</span>
+                  <input placeholder="Tìm theo tên, mã NV, email, phòng ban, chức vụ, số điện thoại..." />
                 </label>
+                <button type="button" className="employee-filter-button">Bộ lọc</button>
+                <div className="employee-view-toggle">
+                  <button type="button" className="active">List</button>
+                  <button type="button">Grid</button>
+                </div>
+                <button type="button" className="employee-action-button">Import</button>
+                <button type="button" className="employee-action-button">Xuất</button>
+                <button type="button" className="primary-action" onClick={() => openModal("employee")}>+ Thêm nhân viên</button>
               </div>
 
-              <div className="employee-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th><input type="checkbox" aria-label="Chọn tất cả" /></th>
-                      <th>Mã NV</th>
-                      <th>Họ và tên</th>
-                      <th>Phòng ban</th>
-                      <th>Chức vụ</th>
-                      <th>Chi nhánh</th>
-                      <th>Ngày vào</th>
-                      <th>Trạng thái</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {employees.map((row, index) => (
-                      <tr className={index === 1 ? "selected" : ""} key={row[0]}>
-                        <td><input type="checkbox" aria-label={`Chọn ${row[1]}`} /></td>
-                        <td><strong className="employee-code">{row[0]}</strong></td>
-                        <td>
-                          <div className="employee-name-cell">
-                            <span>{row[1].split(" ").map((word) => word[0]).slice(-2).join("")}</span>
-                            <div>
-                              <strong>{row[1]}</strong>
-                              <small>{row[2]}</small>
-                            </div>
-                          </div>
-                        </td>
-                        <td>{row[3]}</td>
-                        <td>{row[4]}</td>
-                        <td><span className="employee-branch-pill">{row[5]}</span></td>
-                        <td>{row[6]}</td>
-                        <td><span className={`employee-status-pill ${row[7] === "Mới" ? "new" : ""}`}>{row[7]}</span></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="employee-pagination">
-                <span>Trang 1/6</span>
-                <div>
-                  {["«", "‹", "1", "2", "3", "4", "5", "›", "»"].map((item) => (
-                    <button type="button" className={item === "1" ? "active" : ""} key={item}>{item}</button>
+              <div className="employee-table-shell">
+                <aside className="employee-department-filter">
+                  <div className="employee-table-caption">PHÒNG BAN</div>
+                  {departments.map(([label, count, kind], index) => (
+                    <button type="button" className={index === 0 ? "active" : ""} key={label}>
+                      <span>{kind === "all" ? "ALL" : "PB"}</span>
+                      <strong>{label}</strong>
+                      <em>{count}</em>
+                    </button>
                   ))}
+                </aside>
+
+                <div className="employee-table-area">
+                  <div className="employee-table-meta">
+                    <span>Hiển thị <strong>1-50</strong> trong <strong>293</strong> kết quả</span>
+                    <label>
+                      Hiển thị
+                      <select defaultValue="50">
+                        <option value="50">50 dòng</option>
+                        <option value="100">100 dòng</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <div className="employee-table">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th><input type="checkbox" aria-label="Chọn tất cả" /></th>
+                          <th>Mã NV</th>
+                          <th>Họ và tên</th>
+                          <th>Phòng ban</th>
+                          <th>Chức vụ</th>
+                          <th>Chi nhánh</th>
+                          <th>Ngày vào</th>
+                          <th>Trạng thái</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {employees.map((row, index) => (
+                          <tr className={index === 1 ? "selected" : ""} key={row[0]}>
+                            <td><input type="checkbox" aria-label={`Chọn ${row[1]}`} /></td>
+                            <td><strong className="employee-code">{row[0]}</strong></td>
+                            <td>
+                              <div className="employee-name-cell">
+                                <span>{row[1].split(" ").map((word) => word[0]).slice(-2).join("")}</span>
+                                <div>
+                                  <strong>{row[1]}</strong>
+                                  <small>{row[2]}</small>
+                                </div>
+                              </div>
+                            </td>
+                            <td>{row[3]}</td>
+                            <td>{row[4]}</td>
+                            <td><span className="employee-branch-pill">{row[5]}</span></td>
+                            <td>{row[6]}</td>
+                            <td><span className={`employee-status-pill ${row[7] === "Mới" ? "new" : ""}`}>{row[7]}</span></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <EmployeePagination />
                 </div>
               </div>
-            </div>
-          </div>
+            </>
+          ) : null}
+
+          {directoryTab === "retirement" ? (
+            <RetirementDirectory rows={retirementRows} onAdd={() => openModal("retirement")} />
+          ) : null}
+
+          {directoryTab === "foreigners" ? (
+            <ForeignerDirectory rows={foreignRows} onAdd={() => openModal("foreigner")} />
+          ) : null}
         </article>
       </section>
 
+      {renderModal()}
+    </>
+  );
+}
+
+function Field({
+  label,
+  placeholder,
+  type = "text",
+  asSelect = false,
+  textarea = false,
+  wide = false,
+}: {
+  label: string;
+  placeholder: string;
+  type?: string;
+  asSelect?: boolean;
+  textarea?: boolean;
+  wide?: boolean;
+}) {
+  return (
+    <label className={wide ? "wide" : ""}>
+      <span>{label}</span>
+      {textarea ? (
+        <textarea placeholder={placeholder} />
+      ) : asSelect ? (
+        <select defaultValue="">
+          <option value="">{placeholder}</option>
+        </select>
+      ) : (
+        <input type={type} placeholder={placeholder} />
+      )}
+    </label>
+  );
+}
+
+function EmployeePagination() {
+  return (
+    <div className="employee-pagination">
+      <span>Trang 1/6</span>
+      <div>
+        {["«", "‹", "1", "2", "3", "4", "5", "›", "»"].map((item) => (
+          <button type="button" className={item === "1" ? "active" : ""} key={item}>{item}</button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RetirementDirectory({ rows, onAdd }: { rows: string[][]; onAdd: () => void }) {
+  return (
+    <>
+      <div className="directory-action-row">
+        <button type="button" className="primary-action" onClick={onAdd}>+ Thêm nhân viên</button>
+        <button type="button" className="primary-action">Xuất Excel</button>
+      </div>
+      <div className="directory-filter-row">
+        <label className="wide-search">
+          <span>⌕</span>
+          <input placeholder="Tìm kiếm theo mã, tên, phòng ban..." />
+        </label>
+        <input type="date" />
+        <input type="date" />
+        <select defaultValue="all"><option value="all">Tất cả thông báo</option></select>
+        <select defaultValue="all"><option value="all">Tất cả quyết định</option></select>
+      </div>
+      <div className="employee-table retirement-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã NV</th>
+              <th>Họ tên</th>
+              <th>Giới tính</th>
+              <th>Phòng ban</th>
+              <th>Chức vụ</th>
+              <th>Ngày sinh</th>
+              <th>Dự kiến nghỉ hưu</th>
+              <th>Trạng thái</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row[0]}>
+                <td><strong>{row[0]}</strong></td>
+                <td>
+                  <div className="employee-name-cell">
+                    <span>{row[1].split(" ").map((word) => word[0]).slice(-2).join("")}</span>
+                    <div><strong>{row[1]}</strong><small>{row[2]}</small></div>
+                  </div>
+                </td>
+                <td>{row[3]}</td>
+                <td>{row[4]}</td>
+                <td>{row[5]}</td>
+                <td>{row[6]}</td>
+                <td><strong className="retirement-date">{row[7]}</strong></td>
+                <td><span className="status-lines">{row[8]}<small>{row[9]}</small></span></td>
+                <td><span className="table-actions">Sửa Xóa</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
+function ForeignerDirectory({ rows, onAdd }: { rows: string[][]; onAdd: () => void }) {
+  return (
+    <>
+      <div className="directory-action-row">
+        <button type="button" className="primary-action" onClick={onAdd}>+ Thêm người nước ngoài</button>
+        <button type="button" className="primary-action">Xuất Excel</button>
+      </div>
+      <div className="directory-filter-row single">
+        <label className="wide-search">
+          <span>⌕</span>
+          <input placeholder="Tìm kiếm theo mã, tên, quốc tịch, số passport..." />
+        </label>
+      </div>
+      <div className="employee-table foreigner-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã NV</th>
+              <th>Họ tên</th>
+              <th>Quốc tịch</th>
+              <th>Phòng ban</th>
+              <th>Passport</th>
+              <th>Visa</th>
+              <th>Giấy phép LĐ</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row[0]}>
+                <td><strong>{row[0]}</strong></td>
+                <td>
+                  <div className="employee-name-cell">
+                    <span>{row[1].split(" ").map((word) => word[0]).slice(0, 2).join("")}</span>
+                    <div><strong>{row[1]}</strong><small>{row[2]}</small></div>
+                  </div>
+                </td>
+                <td>{row[3]}</td>
+                <td>{row[4]}</td>
+                <td><strong>{row[5]}</strong><small>HSD: {row[6]}</small></td>
+                <td><strong>{row[7]}</strong><small>Loại: {row[8]}</small><small className={row[9].includes("2026") ? "danger" : ""}>HSD: {row[9]}</small></td>
+                <td><strong>{row[10]}</strong><small className={row[11].includes("2026") ? "danger" : ""}>HSD: {row[11]}</small></td>
+                <td><span className="table-actions">Sửa Xóa</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }
