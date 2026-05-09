@@ -1167,8 +1167,6 @@ function ChevronIcon({ open }: { open: boolean }) {
 }
 
 function EmployeeProfileSection() {
-  const [profileTab, setProfileTab] = useState("overview");
-
   const employeeStats = [
     ["300", "Tổng nhân sự", "5 phòng ban", "people"],
     ["282", "Đang làm việc", "94% tổng nhân sự", "active"],
@@ -1192,73 +1190,6 @@ function EmployeeProfileSection() {
     ["Marketing", "62", "dept"],
     ["Nhân Sự", "54", "dept"],
     ["Tài Chính", "56", "dept"],
-  ];
-
-  const profileTabs = [
-    ["overview", "Tổng quan"],
-    ["personal", "Cá nhân"],
-    ["work", "Công việc"],
-    ["history", "Quá trình"],
-    ["bank", "Ngân hàng"],
-    ["audit", "Audit"],
-  ];
-
-  const profileFields: Record<string, string[][]> = {
-    overview: [
-      ["Mã nhân viên", "EMP0235"],
-      ["Trạng thái", "Đang làm việc"],
-      ["Ngày vào", "08/06/2024"],
-      ["Ngày ký HĐLĐ", "08/08/2024"],
-      ["Bộ phận", "Marketing"],
-      ["Chức danh", "Data Analyst"],
-    ],
-    personal: [
-      ["CCCD", "********1234"],
-      ["Ngày sinh", "12/09/1998"],
-      ["SĐT", "********90"],
-      ["Email", "cuong.bui235@company.com"],
-      ["Địa chỉ", "Đà Nẵng"],
-      ["PDPA", "Đã ký phụ lục"],
-    ],
-    work: [
-      ["Chi nhánh", "Đà Nẵng"],
-      ["Khối/Ban", "Back Office"],
-      ["Phòng", "Marketing"],
-      ["Cost Center", "MKT-062"],
-      ["Quản lý", "Hồ Thị Vy"],
-      ["Tài khoản", "Đang hoạt động"],
-    ],
-    history: [
-      ["Công việc", "2 lần điều chuyển"],
-      ["Lương cơ bản", "Ẩn theo quyền"],
-      ["Phụ cấp", "Housing, Productivity"],
-      ["Lương BH", "Theo chính sách"],
-      ["KPI", "A · 110%"],
-      ["Snapshot", "01/01/2026"],
-    ],
-    bank: [
-      ["Ngân hàng", "Vietinbank"],
-      ["Số tài khoản", "******7890"],
-      ["Chi nhánh", "Đà Nẵng"],
-      ["Tài khoản chính", "Có"],
-      ["Quyền xem", "Payroll Admin"],
-      ["Trạng thái", "Đã xác minh"],
-    ],
-    audit: [
-      ["Tạo hồ sơ", "HR Admin · 08/06/2024"],
-      ["Cập nhật lương", "Payroll Admin · 01/01/2026"],
-      ["Export gần nhất", "HR Admin · 07/05/2026"],
-      ["Trường nhạy cảm", "Đã mask khi xem"],
-      ["Version", "v18"],
-      ["Xung đột", "Optimistic locking bật"],
-    ],
-  };
-
-  const processItems = [
-    ["Thay đổi công việc", "Marketing / Data Team", "Hiệu lực 01/03/2025"],
-    ["Lương cơ bản", "Ẩn theo quyền", "Hiệu lực 01/01/2026"],
-    ["Phụ cấp Housing", "300.000đ", "Không hard-code"],
-    ["Đánh giá KPI", "Loại A · 110%", "Áp dụng từ T01/2026"],
   ];
 
   return (
@@ -1400,69 +1331,6 @@ function EmployeeProfileSection() {
         </article>
       </section>
 
-      <section className="employee-detail-workspace">
-        <aside className="dashboard-panel employee-detail-panel">
-          <div className="employee-profile-head">
-            <span>BC</span>
-            <div>
-              <h2>Bùi Anh Cường</h2>
-              <p>EMP0235 · Marketing · Data Analyst</p>
-            </div>
-          </div>
-
-          <div className="employee-tabs">
-            {profileTabs.map(([key, label]) => (
-              <button
-                type="button"
-                className={profileTab === key ? "active" : ""}
-                key={key}
-                onClick={() => setProfileTab(key)}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-
-          <div className="profile-field-grid">
-            {profileFields[profileTab].map(([label, value]) => (
-              <div key={label}>
-                <span>{label}</span>
-                <strong>{value}</strong>
-              </div>
-            ))}
-          </div>
-
-          <div className="process-card-list">
-            <h3>Quá trình hiện hành</h3>
-            {processItems.map(([label, value, note]) => (
-              <article key={label}>
-                <div>
-                  <span>{label}</span>
-                  <strong>{value}</strong>
-                </div>
-                <small>{note}</small>
-              </article>
-            ))}
-          </div>
-        </aside>
-
-        <article className="dashboard-panel employee-rule-panel">
-          <div className="employee-section-heading">
-            <h2>Quy tắc dữ liệu & bảo mật</h2>
-            <p>Các điều kiện chính trước khi tạo mới, import, export hoặc xem trường nhạy cảm.</p>
-          </div>
-          <div className="employee-rule-list">
-            {[
-              "Mã NV tối đa 5 ký tự, unique và không đổi sau khi tạo",
-              "CCCD 12 số, lưu mã hóa và chỉ hiển thị dạng mask",
-              "Ngày kết thúc thử việc/học việc bắt buộc để sinh HĐ lần 1",
-              "Export Excel phải ghi audit log và kiểm tra quyền trường nhạy cảm",
-            ].map((rule) => (
-              <span key={rule}>{rule}</span>
-            ))}
-          </div>
-        </article>
-      </section>
     </>
   );
 }
