@@ -3988,6 +3988,180 @@ tbody tr:last-child td {
   margin: 0;
 }
 
+/* Comfort typography pass: calmer weights and sizes for long-use HR screens. */
+body {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+button,
+input,
+select,
+textarea {
+  font-weight: 500;
+}
+
+button,
+.home-actions button,
+.employee-directory-toolbar button,
+.directory-action-row button,
+.employee-modal-foot button {
+  font-weight: 650;
+}
+
+.home-logo strong,
+.home-menu-label,
+.home-user strong,
+.top-profile strong,
+.employee-department-filter strong,
+.employee-name-cell strong,
+.employee-modal-head h2 {
+  font-weight: 750;
+}
+
+.home-menu-button {
+  font-size: 14px;
+}
+
+.home-sub-button {
+  font-size: 13px;
+  font-weight: 550;
+}
+
+.home-search input,
+.employee-toolbar input,
+.wide-search input,
+.employee-modal-grid input,
+.employee-modal-grid select,
+.employee-modal-grid textarea,
+.employee-modal-stack input,
+.employee-modal-stack select,
+.employee-modal-stack textarea {
+  font-size: 13px;
+}
+
+.home-content {
+  color: #243246;
+}
+
+.employee-directory-hero h1 {
+  font-size: 27px;
+  font-weight: 750;
+}
+
+.employee-directory-hero p {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.employee-top-tabs button,
+.employee-status-tabs button {
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.employee-top-tabs span,
+.employee-status-tabs span,
+.employee-stat-icon,
+.employee-department-filter em,
+.employee-code {
+  font-weight: 650;
+}
+
+.employee-directory-stat {
+  min-height: 92px;
+  padding: 16px;
+}
+
+.employee-directory-stat strong {
+  font-size: 25px;
+  font-weight: 750;
+}
+
+.employee-directory-stat span:not(.employee-stat-icon),
+.employee-directory-stat small {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.employee-directory-toolbar {
+  padding: 16px 18px;
+}
+
+.employee-directory-toolbar button,
+.directory-filter-row input,
+.directory-filter-row select {
+  font-size: 13px;
+}
+
+.employee-table th,
+.employee-table-area .employee-table th,
+.retirement-table th,
+.foreigner-table th {
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.employee-table td,
+.employee-table-area .employee-table td,
+.retirement-table td,
+.foreigner-table td {
+  font-size: 13px;
+}
+
+.employee-status-pill,
+.employee-branch-pill {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.employee-name-cell > span {
+  font-weight: 650;
+}
+
+.employee-name-cell small,
+.foreigner-table td small,
+.status-lines {
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.employee-pagination,
+.employee-table-meta,
+.employee-table-caption {
+  font-size: 12px;
+}
+
+.employee-pagination button {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.employee-modal {
+  color: #1f2a3a;
+}
+
+.employee-modal-head h2 {
+  font-size: 17px;
+}
+
+.employee-modal-tabs button {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.employee-modal-grid label,
+.employee-modal-stack label,
+.employee-modal-stack h3 {
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.employee-modal-note {
+  font-size: 12px;
+  font-weight: 600;
+}
+
 @media (max-width: 1500px) {
   .module-board {
     grid-template-columns: repeat(4, minmax(0, 1fr));
