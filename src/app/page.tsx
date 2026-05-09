@@ -1167,6 +1167,8 @@ function ChevronIcon({ open }: { open: boolean }) {
 }
 
 function EmployeeProfileSection() {
+  const [profileTab, setProfileTab] = useState("overview");
+
   const employeeStats = [
     ["300", "Tổng hồ sơ", "292 đang làm việc"],
     ["18", "Hồ sơ cần bổ sung", "CCCD, tài khoản NH, NPT"],
@@ -1175,28 +1177,128 @@ function EmployeeProfileSection() {
   ];
 
   const employees = [
-    ["00003", "Nguyễn Văn An", "Production 3", "Assy 1", "Công nhân", "Đang làm việc"],
-    ["00791", "Trần Thị Bình", "HR", "HR", "Nhân viên", "Thử việc"],
-    ["01742", "Lê Minh Châu", "Accounting", "Accounting", "Nhân viên", "Đang làm việc"],
-    ["02118", "Phạm Quốc Dũng", "Molding", "Molding Engineer", "Công nhân", "Học việc"],
-    ["02409", "Đỗ Thị Hà", "Production 1", "Line 2", "Công nhân", "Nghỉ thai sản"],
-    ["03122", "Hoàng Minh Đức", "IT", "System", "Nhân viên", "Đang làm việc"],
+    ["00003", "Nguyễn Văn An", "********1234", "12/09/1998", "Production 3 / Assy 1", "Assembly Operator · CN", "12/02/2024", "12/04/2024", "Đang làm việc"],
+    ["00791", "Trần Thị Bình", "********4412", "03/11/1997", "HR", "HR Executive · NV", "04/05/2026", "04/07/2026", "Thử việc"],
+    ["01742", "Lê Minh Châu", "********0901", "22/01/1994", "Accounting", "Accountant · NV", "16/08/2022", "16/10/2022", "Đang làm việc"],
+    ["02118", "Phạm Quốc Dũng", "********8820", "19/07/2001", "Molding", "Molding Operator · CN", "18/04/2026", "18/06/2026", "Học việc"],
+    ["02409", "Đỗ Thị Hà", "********3418", "05/03/1996", "Production 1 / Line 2", "Line Worker · CN", "09/01/2023", "09/03/2023", "Nghỉ thai sản"],
+    ["03122", "Hoàng Minh Đức", "********7792", "14/12/1992", "IT / System", "System Admin · NV", "21/06/2021", "21/08/2021", "Đang làm việc"],
   ];
 
-  const profileFields = [
-    ["Mã nhân viên", "00003"],
-    ["Ngày vào", "12/02/2024"],
-    ["Loại lao động", "Công nhân"],
-    ["Bộ phận", "Production 3 / Assy 1"],
-    ["Chức danh", "Assembly Operator"],
-    ["Bậc lương", "WK1 · áp dụng 2026"],
+  const detailTabs = [
+    ["overview", "Tổng quan"],
+    ["personal", "Cá nhân"],
+    ["work", "Công việc"],
+    ["history", "Quá trình"],
+    ["contacts", "NPT"],
+    ["bank", "Ngân hàng"],
+    ["documents", "Tài liệu"],
+    ["offboarding", "Thôi việc"],
+    ["audit", "Audit"],
   ];
+
+  const profileFieldGroups: Record<string, string[][]> = {
+    overview: [
+      ["Mã nhân viên", "00003"],
+      ["Trạng thái", "Đang làm việc"],
+      ["Ngày vào", "12/02/2024"],
+      ["Ngày ký HĐLĐ", "13/04/2024"],
+      ["Bộ phận", "Production 3 / Assy 1"],
+      ["Chức danh", "Assembly Operator"],
+      ["Lương hiện tại", "Ẩn theo quyền"],
+      ["KPI gần nhất", "A · 110%"],
+    ],
+    personal: [
+      ["CCCD", "********1234"],
+      ["Ngày sinh", "12/09/1998"],
+      ["SĐT", "********90"],
+      ["Email", "an.nv@lsev.vn"],
+      ["Địa chỉ thường trú", "Bắc Ninh"],
+      ["Tình trạng hôn nhân", "Đã kết hôn"],
+      ["Trình độ", "THPT"],
+      ["PDPA", "Đã ký phụ lục"],
+    ],
+    work: [
+      ["Chi nhánh", "LSEV"],
+      ["Khối/Ban", "Production"],
+      ["Phòng", "Production 3"],
+      ["Bộ phận/Tổ", "Assy 1"],
+      ["Cost Center", "481003"],
+      ["Quản lý trực tiếp", "Trần Văn Hùng"],
+      ["Phân loại", "Công nhân"],
+      ["Tài khoản", "Đang hoạt động"],
+    ],
+    history: [
+      ["Công việc", "2 lần điều chuyển"],
+      ["Lương cơ bản", "WK1 · 5.630.000đ"],
+      ["Phụ cấp", "Housing, Productivity"],
+      ["Lương BH", "5.630.000đ"],
+      ["Đánh giá KPI", "A · hiệu lực 01/01/2026"],
+      ["Snapshot", "Cập nhật 01/01/2026"],
+    ],
+    contacts: [
+      ["Người liên hệ", "Nguyễn Thị Lan"],
+      ["Quan hệ", "Vợ"],
+      ["Điện thoại", "********21"],
+      ["NPT", "01 người"],
+      ["Giảm trừ PIT", "6.200.000đ/tháng"],
+      ["Hiệu lực NPT", "01/02/2025"],
+    ],
+    bank: [
+      ["Ngân hàng", "Vietinbank"],
+      ["Số tài khoản", "******7890"],
+      ["Chi nhánh", "Bắc Ninh"],
+      ["Tài khoản chính", "Có"],
+      ["Quyền xem", "Payroll Admin"],
+      ["Trạng thái", "Đã xác minh"],
+    ],
+    documents: [
+      ["CCCD scan", "2 file · nhạy cảm"],
+      ["Hồ sơ ứng viên", "1 file"],
+      ["Bằng cấp", "2 file"],
+      ["PDPA", "Đã ký"],
+      ["HĐLĐ", "Liên kết module Hợp đồng"],
+      ["Lần upload cuối", "08/05/2026"],
+    ],
+    offboarding: [
+      ["Trạng thái", "Chưa áp dụng"],
+      ["Ngày thôi việc", "-"],
+      ["Quyết định", "-"],
+      ["Checklist", "0/6 hoàn tất"],
+      ["Tài khoản", "Không được tắt khi checklist chưa xong"],
+      ["Cảnh báo", "Bắt buộc audit khi đóng hồ sơ"],
+    ],
+    audit: [
+      ["Tạo hồ sơ", "HR Admin · 12/02/2024"],
+      ["Cập nhật lương", "Payroll Admin · 01/01/2026"],
+      ["Export gần nhất", "HR Admin · 07/05/2026"],
+      ["Trường nhạy cảm", "Đã mask khi xem"],
+      ["Version", "v18"],
+      ["Xung đột", "Optimistic locking bật"],
+    ],
+  };
 
   const processItems = [
-    ["Lương cơ bản", "5.630.000đ", "Hiệu lực 01/01/2026"],
-    ["Phụ cấp Housing", "300.000đ", "Quản lý theo quá trình"],
-    ["KPI", "Loại A · 110%", "Áp dụng từ T01/2026"],
-    ["HĐLĐ", "Xác định thời hạn", "Cảnh báo trước 30 ngày"],
+    ["Thay đổi công việc", "Production 3 / Assy 1", "Hiệu lực 01/03/2025"],
+    ["Lương cơ bản", "WK1 · 5.630.000đ", "Hiệu lực 01/01/2026"],
+    ["Phụ cấp Housing", "300.000đ", "Không hard-code"],
+    ["Lương bảo hiểm", "5.630.000đ", ">= LTT vùng"],
+    ["Đánh giá KPI", "Loại A · 110%", "Áp dụng từ T01/2026"],
+  ];
+
+  const wizardSteps = [
+    ["01", "Thông tin cá nhân", "Mã NV tự sinh, CCCD unique, thông tin liên hệ"],
+    ["02", "Thông tin công việc", "Bộ phận, chức danh, cost center, loại NV/CN"],
+    ["03", "Lương - phụ cấp - BH", "LCB, KPI cơ sở, phụ cấp, lương bảo hiểm"],
+    ["04", "Liên hệ & xác nhận", "NPT, ngân hàng, tài liệu, kiểm tra trước lưu"],
+  ];
+
+  const validationRules = [
+    "Mã NV tối đa 5 ký tự, unique và không đổi sau khi tạo",
+    "CCCD 12 số, lưu mã hóa và chỉ hiển thị dạng mask",
+    "Ngày kết thúc thử việc/học việc bắt buộc để sinh HĐ lần 1",
+    "Chọn bộ phận tự gán cost center; chọn chức danh tự xác định NV/CN",
+    "Export Excel phải ghi audit log và kiểm tra quyền trường nhạy cảm",
   ];
 
   return (
@@ -1207,6 +1309,7 @@ function EmployeeProfileSection() {
           <p>Quản lý vòng đời nhân sự: thông tin cá nhân, công việc, quá trình, hợp đồng và thôi việc.</p>
         </div>
         <div className="employee-actions">
+          <button type="button">Cấu hình cột</button>
           <button type="button">Import Excel</button>
           <button type="button">Xuất danh sách</button>
           <button type="button" className="primary-action">Thêm nhân viên</button>
@@ -1250,9 +1353,12 @@ function EmployeeProfileSection() {
                 <tr>
                   <th>Mã NV</th>
                   <th>Họ tên</th>
-                  <th>Khối</th>
+                  <th>CCCD</th>
+                  <th>Ngày sinh</th>
                   <th>Bộ phận</th>
-                  <th>Phân loại</th>
+                  <th>Chức danh</th>
+                  <th>Ngày vào</th>
+                  <th>KT TV/HV</th>
                   <th>Trạng thái</th>
                 </tr>
               </thead>
@@ -1261,7 +1367,7 @@ function EmployeeProfileSection() {
                   <tr className={index === 0 ? "selected" : ""} key={row[0]}>
                     {row.map((cell, cellIndex) => (
                       <td key={`${row[0]}-${cellIndex}`}>
-                        {cellIndex === 5 ? <span className="employee-status-pill">{cell}</span> : cell}
+                        {cellIndex === 8 ? <span className="employee-status-pill">{cell}</span> : cell}
                       </td>
                     ))}
                   </tr>
@@ -1281,13 +1387,20 @@ function EmployeeProfileSection() {
           </div>
 
           <div className="employee-tabs">
-            <button type="button" className="active">Tổng quan</button>
-            <button type="button">Quá trình</button>
-            <button type="button">Hợp đồng</button>
+            {detailTabs.map(([key, label]) => (
+              <button
+                type="button"
+                className={profileTab === key ? "active" : ""}
+                key={key}
+                onClick={() => setProfileTab(key)}
+              >
+                {label}
+              </button>
+            ))}
           </div>
 
           <div className="profile-field-grid">
-            {profileFields.map(([label, value]) => (
+            {profileFieldGroups[profileTab].map(([label, value]) => (
               <div key={label}>
                 <span>{label}</span>
                 <strong>{value}</strong>
@@ -1308,6 +1421,38 @@ function EmployeeProfileSection() {
             ))}
           </div>
         </aside>
+      </section>
+
+      <section className="employee-deep-grid">
+        <article className="dashboard-panel employee-wizard-panel">
+          <div className="employee-section-heading">
+            <h2>Wizard thêm/sửa hồ sơ</h2>
+            <p>Luồng 4 bước giúp HR nhập đúng dữ liệu đầu vào cho Hợp đồng, Chấm công, Lương và Phân quyền.</p>
+          </div>
+          <div className="wizard-step-list">
+            {wizardSteps.map(([step, title, desc]) => (
+              <article key={step}>
+                <span>{step}</span>
+                <div>
+                  <strong>{title}</strong>
+                  <small>{desc}</small>
+                </div>
+              </article>
+            ))}
+          </div>
+        </article>
+
+        <article className="dashboard-panel employee-rule-panel">
+          <div className="employee-section-heading">
+            <h2>Validation & bảo mật</h2>
+            <p>Các rule bắt buộc trước khi lưu, import/export hoặc xem dữ liệu nhạy cảm.</p>
+          </div>
+          <div className="employee-rule-list">
+            {validationRules.map((rule) => (
+              <span key={rule}>{rule}</span>
+            ))}
+          </div>
+        </article>
       </section>
     </>
   );

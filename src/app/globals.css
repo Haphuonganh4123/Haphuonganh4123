@@ -1719,7 +1719,7 @@ a {
 }
 
 .employee-table table {
-  min-width: 760px;
+  min-width: 1120px;
 }
 
 .employee-table th {
@@ -1778,8 +1778,8 @@ a {
 }
 
 .employee-tabs {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   margin-top: 22px;
   padding: 4px;
@@ -1788,6 +1788,7 @@ a {
 }
 
 .employee-tabs button {
+  flex: 1 0 calc(33.333% - 6px);
   min-height: 34px;
   border: 0;
   border-radius: 9px;
@@ -1864,6 +1865,103 @@ a {
   color: #64748b;
   font-size: 12px;
   text-align: right;
+}
+
+.employee-deep-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.58fr) minmax(0, 0.42fr);
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.employee-wizard-panel,
+.employee-rule-panel {
+  padding: 22px;
+}
+
+.employee-section-heading h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.employee-section-heading p {
+  margin: 8px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.wizard-step-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.wizard-step-list article {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #edf0f4;
+  border-radius: 14px;
+  background: #fbfcfe;
+}
+
+.wizard-step-list span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.wizard-step-list strong {
+  display: block;
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.wizard-step-list small {
+  display: block;
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.employee-rule-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.employee-rule-list span {
+  position: relative;
+  display: block;
+  padding: 12px 12px 12px 34px;
+  border: 1px solid #edf0f4;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.employee-rule-list span::before {
+  content: "";
+  position: absolute;
+  top: 17px;
+  left: 14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #16a34a;
 }
 
 .calendar-layout {
