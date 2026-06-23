@@ -1,28 +1,72 @@
-# QUẢN LÝ NGHỈ PHÉP — VIỆC CẦN FIX (dev)
+# QUẢN LÝ NGHỈ PHÉP — YÊU CẦU BỔ SUNG (BA + Dev)
 
-Đối chiếu file yêu cầu LSEV 09/06 + app-dev (LSEV HR Test, kỳ 6/2026). **Không cần module mới**, chủ yếu sửa engine + 3 màn có sẵn.
+Đối chiếu file yêu cầu LSEV 09/06 + dữ liệu app-dev (LSEV HR Test, kỳ 6/2026).
+**Không cần module mới** — chủ yếu sửa engine + 3 màn có sẵn (Chính sách phép, Hồ sơ NV, màn duyệt đơn).
 
-## Việc cần làm
+---
 
-| # | Việc | Vị trí | Xong khi |
-|---|---|---|---|
-| 1 | Quỹ phép **prorate theo ngày vào** (≤15 tính tháng, ≥16 bỏ) | engine + `/leave-policy` | NV vào 1/6 → quỹ ~7 (không phải 12) |
-| 2 | **Phép tồn theo tháng** + tích lũy 1/tháng, **không ứng phép tương lai** | engine + `/leave-policy` (tắt "ứng phép") | T6 chỉ dùng ≤6 ngày |
-| 3 | Hiển thị **"phép được nghỉ tháng này"** + **chặn nghỉ vượt tồn** | form Tạo đơn + `/me` | hiện đúng số tháng, vượt thì cảnh báo |
-| 4 | **F2 — phép cộng thêm** từng NV | Hồ sơ NV › tab Nghỉ phép (clone đ/c Bảo hiểm) | nhập +N ngày, ngày HL, lý do |
-| 5 | **Tách ký hiệu** 1 đơn → nhiều đoạn (F→MP→O), tự chuyển O khi hết F | màn duyệt đơn (Chi tiết đơn) | duyệt 4 ngày tách được F/F/MP/O |
-| 6 | **Sửa / Xóa đơn nghỉ** (½ & cả ngày) → hoàn phép + tính lại công | danh sách + Chi tiết đơn | xóa đơn F → phép hoàn lại, chặn khi đã chốt lương |
-| 7 | Sửa **quỹ MP = 2.5 ngày/năm** nữ (đang ~30) | `/leave-policy` (MP, giới tính Nữ) | MP còn ≤2.5 |
-| 8 | Fix **2 báo cáo lỗi**: Phép tồn cuối năm, Phép theo phòng ban | `/reports?r=leave-balance`, `?r=leave-usage-dept` | tải được, số đã dùng/còn lại đúng |
-| 9 | **Engine đọc & áp Chính sách nghỉ phép** (màn có nhưng đang trống) | `/leave-policy` | set Tối đa/Tích lũy → áp đúng cho NV |
-| 10 | **Chuyển phép tồn**: KHÔNG chuyển phép năm trước sang năm sau | `/leave-carry` | chạy carry không cộng phép sang năm mới |
+## NHÓM 1 — QUỸ & TÍNH PHÉP
 
-## Thiếu trường trong `/leave-policy` (form Tạo chính sách)
-Đang có: Tối đa/năm · Tích lũy/tháng · Giới tính · Loại NV · Cho phép ứng phép · Ngày HL. **Cần thêm:**
-- **Mốc ngày tháng đầu** (mặc định 15) — để prorate.
+**1. Quỹ phép tính theo ngày vào công ty**
+- Hiện: mọi NV được **12 ngày**, kể cả người vào tháng 6 (đã kiểm: 61 NV vào 2026 vẫn 12).
+- Cần: vào **trước 1/1** = 12; vào **ngày 1–15** tháng X = số tháng X→12; vào **≥16** = trừ thêm 1. VD vào 1/6 → ~7 ngày.
+- Vị trí: engine + cấu hình `/hr/leave-policy`. **Xong khi:** NV vào 1/6 ra ~7, không phải 12.
+
+**2. Phép tồn theo tháng (không cho ứng phép tương lai)**
+- Hiện: hiển thị cả quỹ năm (12), nghỉ bao nhiêu cũng được.
+- Cần: phép **tích lũy 1 ngày/tháng**; tại tháng N chỉ được dùng phần đã tích. VD T6 chỉ được nghỉ ≤6 ngày.
+- Vị trí: engine + `/hr/leave-policy` (tắt "Cho phép ứng phép trước"). **Xong khi:** T6 chặn nghỉ >6 nếu chưa tích đủ.
+
+**3. Hiển thị "phép được nghỉ trong tháng" + cảnh báo vượt**
+- Hiện: chỉ thấy "Phép còn năm 0/12".
+- Cần: thêm dòng **"phép được nghỉ tháng này"** + chặn/cảnh báo khi tạo đơn vượt số đó.
+- Vị trí: form Tạo đơn nghỉ + Trang cá nhân (`/hr/me`).
+
+**4. F2 — nhập phép cộng thêm cho từng NV**
+- Hiện: chưa có chỗ cộng phép thủ công.
+- Cần: ô **"Điều chỉnh phép"** (số ngày +/−, ngày hiệu lực, lý do) — làm **giống mẫu "điều chỉnh Bảo hiểm"** đã có.
+- Vị trí: **Hồ sơ NV › tab Nghỉ phép**. (F2 là per-NV, **không** đặt ở policy.)
+
+**5. Sửa quỹ MP (chế độ nữ) = 2.5 ngày/năm**
+- Hiện: hệ thống cho **MP còn ~30 ngày** (sai ~12 lần).
+- Cần: MP = **2.5 ngày/năm**, chỉ NV nữ.
+- Vị trí: tạo policy MP ở `/hr/leave-policy` (Tối đa 2.5, Giới tính = Nữ). **Xong khi:** MP còn ≤2.5.
+
+---
+
+## NHÓM 2 — ĐƠN NGHỈ
+
+**6. Tách ký hiệu khi duyệt (1 đơn → nhiều loại nghỉ)**
+- Hiện: 1 đơn chỉ chọn **1 ký hiệu** cho cả khoảng ngày.
+- Cần: khi Nhân sự duyệt, **tách khoảng nghỉ thành nhiều đoạn, mỗi đoạn 1 ký hiệu**; **hết phép F thì tự chuyển O**. VD xin nghỉ 08–11/6 → duyệt: 08–09 = F, 10 = MP, 11 = O.
+- Vị trí: màn **Chi tiết đơn / Hộp duyệt**. **Xong khi:** duyệt được 1 đơn ra nhiều ký hiệu.
+
+**7. Sửa / Xóa đơn nghỉ (nửa ngày & cả ngày)**
+- Hiện: tạo được, chưa rõ sửa/xóa.
+- Cần: **Sửa** (đổi loại ½/cả ngày, ngày, ký hiệu) và **Xóa** (gỡ đơn → **hoàn lại phép đã trừ** → ngày về trạng thái chấm công gốc). Sau đó **tự "Tính lại công"**. Đã chốt lương → chặn/cảnh báo + ghi audit.
+- Vị trí: danh sách Nghỉ phép + Chi tiết đơn.
+
+---
+
+## NHÓM 3 — BÁO CÁO & CUỐI NĂM
+
+**8. Fix 2 báo cáo phép đang lỗi**
+- Hiện: "Phép tồn cuối năm" và "Phép theo phòng ban" báo **"Đã xảy ra lỗi"**.
+- Cần: tải được + số **đã dùng / còn lại đúng** (phụ thuộc fix #1, #5).
+- Vị trí: `/hr/reports?r=leave-balance` và `?r=leave-usage-dept`.
+
+**9. Engine đọc & áp "Chính sách nghỉ phép"**
+- Hiện: màn `/hr/leave-policy` có sẵn nhưng **đang trống** (Tối đa/năm="Không giới hạn", Tích lũy="—") → engine cho 12 phẳng.
+- Cần: set policy F (12/năm, 1/tháng) + MP (2.5, nữ) và **engine thật sự áp dụng**.
+
+**10. Chuyển phép tồn (carry-over) — đúng rule**
+- Hiện: có màn `/hr/leave-carry` nhưng chưa rõ rule.
+- Cần: **KHÔNG chuyển phép năm trước sang năm sau** (chỉ để dành trong năm). **Xong khi:** chạy carry không cộng phép sang năm mới.
+
+---
+
+## THIẾU TRƯỜNG TRONG `/hr/leave-policy`
+Form "Tạo chính sách" đang có: Tối đa/năm · Tích lũy/tháng · Giới tính · Loại NV · Cho phép ứng phép · Ngày HL. **Cần thêm:**
+- **Mốc ngày tháng đầu** (mặc định 15) — để prorate theo ngày vào (#1).
 - **Bậc phép theo thâm niên** (12 → 13 ở 5 năm → 14 ở 10 năm).
-- **Quy tắc chuyển phép cuối năm** (Có/Không + tối đa).
-
-## Lưu ý
-- F2 = điều chỉnh per-NV ở Hồ sơ NV, **không** ở policy.
-- Sửa/xóa đơn & tách ký hiệu phải **đồng bộ ngược** quỹ phép + bảng công.
+- **Quy tắc chuyển phép cuối năm** (Có/Không + tối đa) — phục vụ #10.
